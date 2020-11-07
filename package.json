@@ -1,0 +1,30 @@
+{
+  "name": "e-shop",
+  "version": "1.0.0",
+  "description": "MERN e-commerce",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "client": "cd client && npm start",
+    "server": "nodemon server/server.js",
+    "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
+    "start": "node server/server.js",
+    "data:import": "node server/seeder",
+    "data:destroyed": "node server/seeder -d"
+  },
+  "author": "Pijus",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Pijus-dev/MERN-e-commerce/issues"
+  },
+  "homepage": "https://github.com/Pijus-dev/MERN-e-commerce#readme",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "concurrently": "^5.3.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "mongoose": "^5.10.13",
+    "nodemon": "^2.0.6"
+  }
+}

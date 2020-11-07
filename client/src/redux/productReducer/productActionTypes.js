@@ -1,0 +1,6 @@
+const productActionTypes = {
+  PRODUCT_LIST_REQUEST: "PRODUCT_LIST_REQUEST",
+  PRODUCT_LIST_SUCCESS: "PRODUCT_LIST_SUCCESS",
+  PRODUCT_LIST_FAILURE: "PRODUCT_LIST_FAILURE",
+};
+export default productActionTypes;
