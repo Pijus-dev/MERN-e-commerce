@@ -1,23 +1,22 @@
 import React from "react";
-import { Container } from "react-bootstrap";
 
-import Header from "../src/components/header/Header";
 import HomePage from "../src/pages/HomePage/HomePage";
 import ProductPage from "../src/pages/ProductPage/ProductPage";
+import CartPage from "../src/pages/CartPage/CartPage";
+import ProductsPage from "../src/pages/ProductsPage/ProductsPage";
 
 import { Switch, Route } from "react-router-dom";
 
 function App() {
   return (
     <>
-      <Header />
       <main>
-        <Container>
-          <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route path="/product/:id" component={ProductPage} />
-          </Switch>
-        </Container>
+        <Switch>
+          <Route exact path="/" component={HomePage} />
+          <Route path="/product/:id" component={ProductPage} />
+          <Route path="/cart/:id?" component={CartPage} />
+          <Route path="/rubai/:sex" component={ProductsPage} />
+        </Switch>
       </main>
     </>
   );

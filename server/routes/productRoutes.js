@@ -4,9 +4,19 @@ import Product from "../models/productModel.js";
 
 const router = express.Router();
 
-// fetch all products from mongoDB
+// fetch all products based on gender from mongoDB
 // GET to '/api/products
 // @ access Public route
+router.get(
+  "/gender/:sex",
+  expressAsyncHandler(async (req, res) => {
+    const products = await Product.aggregate([
+      { $match: { sex: `${req.params.sex}` } },
+    ]);
+    res.json(products);
+  })
+);
+
 router.get(
   "/",
   expressAsyncHandler(async (req, res) => {
@@ -14,19 +24,20 @@ router.get(
     res.json(products);
   })
 );
-
 // fetch single product from mongoDB
 // GET to '/api/products/:id
 // @ access Public route
-router.get("/:id", expressAsyncHandler(async (req, res) => {
-  const product = await Product.findById(req.params.id);
-  if (product) {
+router.get(
+  "/:id",
+  expressAsyncHandler(async (req, res) => {
+    const product = await Product.findById(req.params.id);
+    if (product) {
       res.json(product);
-
-  } else {
+    } else {
       res.status(404);
       throw new Error("Product not found");
-  }
-}));
+    }
+  })
+);
 
 export default router;

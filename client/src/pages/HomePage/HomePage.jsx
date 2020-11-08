@@ -1,32 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
-import Product from "../../components/product/Product";
-import { Col, Row } from "react-bootstrap";
+import Header from "../../components/header/Header";
+import { withRouter } from "react-router-dom";
+import Video from "../../img/backgroundVideo.mp4";
 
-import axios from "axios";
-
-const HomePage = () => {
-  const [items, setItems] = useState([]);
-  const getItems = async () => {
-    
-    const { data } = await axios.get("/api/products");
-    setItems(data);
-  };
-  useEffect(() => {
-    getItems();
-  }, []);
+import styles from "./homepage.module.scss";
+const HomePage = ({ history }) => {
   return (
     <>
-      <h1>Latest Products</h1>
-      <Row>
-        {items.map((product) => (
-          <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-            <Product product={product} />
-          </Col>
-        ))}
-      </Row>
+      <Header />
+      <div className={styles.video}>
+        <video
+          muted
+          autoPlay
+          style={{
+            position: "absolute",
+            top: 0,
+            height: "100vh",
+            zIndex: "-1",
+          }}
+          loop
+          src={Video}
+          type="video/mp4"
+        />
+
+        <div className={styles.title}>
+          <h1>Refining the Uphill Game</h1>
+          <p>
+            As fit as a trail runner. As efficient as a climber. And as strong
+            as a downhill skier. That’s the competency we built for with the
+            Upstride and Stormstride Jackets and Pants—backcountry touring
+            garments that can help anyone refine their uphill game.
+          </p>
+          <div className={styles.buttons}>
+            <button onClick={() => history.push("/rubai/male")}>
+              Shop Men's
+            </button>
+            <button>Shop Women's</button>
+          </div>
+        </div>
+      </div>
     </>
   );
 };
 
-export default HomePage;
+export default withRouter(HomePage);

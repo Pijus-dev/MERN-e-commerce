@@ -1,0 +1,30 @@
+header {
+  width: 100%;
+  position: relative;
+  z-index: 10;
+
+  &:hover {
+    background-color: white;
+  }
+  &:hover {
+    a {
+      color: black !important;
+    }
+  }
+  a {
+    color: white !important;
+  }
+  #icon--navigation-primary--cart {
+    fill: "black";
+  }
+  .logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+
+    img {
+      max-width: 100%;
+      max-height: 100%;
+    }
+  }
+}

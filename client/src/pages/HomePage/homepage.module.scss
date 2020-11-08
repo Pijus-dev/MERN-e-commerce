@@ -1,0 +1,41 @@
+.title {
+  text-align: center;
+  z-index: 10;
+  top: 30%;
+  position: absolute;
+  left: 25%;
+  width: 50vw;
+
+  h1 {
+    font-size: 2rem;
+    color: white;
+    font-weight: bold;
+  }
+  p {
+    letter-spacing: 0.3rem;
+    color: white;
+    font-size: 1.2rem;
+  }
+  .buttons {
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      background-color: white;
+      font-weight: bolder;
+      color: black;
+      border-radius: 40px;
+      font-size: 1rem;
+      width: 206px;
+      text-align: center;
+      padding: 15px 0;
+      border: none;
+      transition: 200ms ease;
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+  }
+}
