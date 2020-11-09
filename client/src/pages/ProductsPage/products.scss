@@ -1,0 +1,74 @@
+@mixin fontSize {
+  line-height: 1.123;
+  font-size: 5rem;
+  letter-spacing: 1.5px;
+  color: white;
+  font-weight: bolder !important;
+  text-transform: capitalize;
+}
+.backgroundImage {
+  height: 70vh;
+  background-position: center;
+  background-size: cover;
+  width: 100vw;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 0;
+
+  .title {
+    width: 60vw;
+    text-align: center;
+    h1 {
+      @include fontSize;
+    }
+    span {
+      @include fontSize;
+    }
+  }
+}
+h2 {
+  text-transform: capitalize;
+}
+
+.slick-arrow {
+  color: black;
+  height: 3rem;
+  width: 3rem;
+  background-color: #fff;
+  border-radius: 50%;
+  z-index: 10;
+  box-shadow: 0 6px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+.slick-prev {
+  left: -83px;
+
+  &::before {
+    content: "\276E";
+    color: black;
+    line-height: 0.5;
+    font-weight: bold;
+  }
+}
+
+.slick-prev.slick-disabled:before,
+.slick-next .slick-disabled:before {
+  opacity: unset;
+}
+
+.slick-next {
+  &::before {
+    color: black;
+    line-height: 0.5;
+    content: "\276F";
+    font-weight: bold;
+  }
+}
+
+.slick-prev:before,
+.slick-next:before {
+  opacity: 1;
+}

@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 
 import Header from "../../components/header/Header";
+import CustomButton from "../../components/customButton/CustomButton";
 import { withRouter } from "react-router-dom";
 import Video from "../../img/backgroundVideo.mp4";
 
@@ -33,10 +34,14 @@ const HomePage = ({ history }) => {
             garments that can help anyone refine their uphill game.
           </p>
           <div className={styles.buttons}>
-            <button onClick={() => history.push("/rubai/male")}>
+            <CustomButton onClick={() => history.push("/products/gender/male")}>
               Shop Men's
-            </button>
-            <button>Shop Women's</button>
+            </CustomButton>
+            <CustomButton
+              onClick={() => history.push("/products/gender/female")}
+            >
+              Shop Women's
+            </CustomButton>
           </div>
         </div>
       </div>

@@ -1,7 +1,6 @@
 header {
   width: 100%;
-  position: relative;
-  z-index: 10;
+  position: absolute;
 
   &:hover {
     background-color: white;
@@ -11,20 +10,46 @@ header {
       color: black !important;
     }
   }
+  &:hover {
+    svg {
+      fill: black;
+    }
+  }
   a {
     color: white !important;
   }
   #icon--navigation-primary--cart {
     fill: "black";
   }
-  .logo {
-    width: 100px;
-    height: 100px;
-    object-fit: contain;
 
-    img {
-      max-width: 100%;
-      max-height: 100%;
+  svg {
+    fill: white;
+    width: 140px;
+  }
+
+  .searchIcon {
+    margin-top: 4px;
+    position: relative;
+    input {
+      border: none;
+      background: transparent;
+      border-bottom: 1px solid #eee;
+      width: 100%;
+      outline: none;
+    }
+    .inputIcon {
+      position: absolute;
+      top: 0;
+      left: 0;
+
+      svg {
+        width: 20px;
+        height: 20px;
+      }
+    }
+    svg {
+      width: 30px;
+      height: 30px;
     }
   }
 }

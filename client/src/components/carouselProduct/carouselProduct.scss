@@ -1,0 +1,36 @@
+.product {
+  width: 300px;
+  height: 470px;
+  transition: 200ms ease;
+  border-radius: 10px;
+  overflow: hidden;
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  .productImage {
+    height: 360px;
+    width: 300px;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 10px;
+  }
+  .productInfo {
+    width: 70%;
+    margin: 10px 0 0 50px;
+    text-align: center;
+
+    h3 {
+      color: black;
+      font-weight: bold;
+      font-size: 1.3rem;
+      text-align: center;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+    p {
+      margin: 0;
+    }
+  }
+}

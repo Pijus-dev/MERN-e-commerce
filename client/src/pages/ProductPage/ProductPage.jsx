@@ -23,7 +23,6 @@ const ProductPage = ({ match, history }) => {
   const productDetails = useSelector((state) => state.productDetails);
   const { product } = productDetails;
 
-  console.log(match.params.sex);
 
   useEffect(() => {
     dispatch(listProductDetails(match.params.id));
