@@ -1,24 +1,52 @@
-import { userActionTypes } from "./userActionTypes";
+import {
+  userActionLoginTypes,
+  userActionRegisterTypes,
+} from "./userActionTypes";
 
-export const userLoginReducer = (state = {}, action) => {
+const userLoginReducer = (state = {}, action) => {
   switch (action.type) {
-    case userActionTypes.USER_LOGIN_REQUEST:
+    case userActionLoginTypes.USER_LOGIN_REQUEST:
       return {
         loading: true,
       };
-    case userActionTypes.USER_LOGIN_SUCCESS:
+    case userActionLoginTypes.USER_LOGIN_SUCCESS:
       return {
         loading: false,
         userInfo: action.payload,
       };
-    case userActionTypes.USER_LOGIN_FAIL:
+    case userActionLoginTypes.USER_LOGIN_FAIL:
       return {
         loading: false,
         error: action.payload,
       };
-    case userActionTypes.USER_LOGOUT:
+    case userActionLoginTypes.USER_LOGOUT:
       return {};
     default:
       return state;
   }
 };
+
+const userRegisterReducer = (state = {}, action) => {
+  switch (action.type) {
+    case userActionRegisterTypes.USER_REGISTER_REQUEST:
+      return {
+        loading: true,
+      };
+    case userActionRegisterTypes.USER_REGISTER_SUCCESS:
+      return {
+        loading: false,
+        userInfo: action.payload,
+      };
+    case userActionRegisterTypes.USER_REGISTER_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case userActionRegisterTypes.USER_LOGOUT:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export { userLoginReducer, userRegisterReducer };
