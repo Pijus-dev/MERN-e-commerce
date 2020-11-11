@@ -15,9 +15,9 @@ import {
   Image,
   Form,
   Button,
-  Card,
   Container,
 } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 
 import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../../redux/cartReducer/cartActions";
@@ -25,16 +25,19 @@ import { addToCart, removeFromCart } from "../../redux/cartReducer/cartActions";
 const CartPage = ({ match, location, history }) => {
   const productId = match.params.id;
 
-  const qty = location.search ? Number(location.search.split("=")[1]) : 1;
+  const urlParams = location.search.split("=");
+  const size = urlParams[2];
+
+  const qty = urlParams[1] ? Number(urlParams[1].charAt(0)) : 1;
 
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
   useEffect(() => {
     if (productId) {
-      dispatch(addToCart(productId, qty));
+      dispatch(addToCart(productId, qty, size));
     }
-  }, [dispatch, productId, qty]);
+  }, [dispatch, productId, qty, size]);
 
   const removeFromCartHandler = (id) => {
     dispatch(removeFromCart(id));
@@ -58,8 +61,16 @@ const CartPage = ({ match, location, history }) => {
                 {cartItems.map((item) => (
                   <ListGroup.Item key={item.product}>
                     <Row>
+                      <Link></Link>
                       <Col md={4}>
-                        <Image src={item.image} alt={item.name} fluid rounded />
+                        <LinkContainer to={`/product/${item.product}`}>
+                          <Image
+                            src={item.image}
+                            alt={item.name}
+                            fluid
+                            rounded
+                          />
+                        </LinkContainer>
                       </Col>
                       <Col md={8}>
                         <Row>
@@ -69,7 +80,7 @@ const CartPage = ({ match, location, history }) => {
                             </Link>
                           </Col>
                           <Col md={2}>&euro;{item.price}</Col>
-                          <Col md={3}>
+                          <Col md={3} className="my-2">
                             <Form.Control
                               as="select"
                               value={item.qty}
@@ -101,6 +112,11 @@ const CartPage = ({ match, location, history }) => {
                             </Button>
                           </Col>
                         </Row>
+                        <Row>
+                          <Col md={3}>
+                            <p className="my-2 pl-1">Size: {item.sizes}</p>
+                          </Col>
+                        </Row>
                       </Col>
                     </Row>
                   </ListGroup.Item>
@@ -116,10 +132,9 @@ const CartPage = ({ match, location, history }) => {
               </span>
               <span className="text-white">
                 &euro;
-                {cartItems.reduce(
-                  (acc, item) => acc + item.qty * item.price,
-                  0
-                )}
+                {cartItems
+                  .reduce((acc, item) => acc + item.qty * item.price, 0)
+                  .toFixed(2)}
               </span>
             </div>
             <Button onClick={checkoutHandler} type="button">

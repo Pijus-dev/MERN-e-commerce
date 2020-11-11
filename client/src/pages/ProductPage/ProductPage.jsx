@@ -19,31 +19,31 @@ import { listProductDetails } from "../../redux/productReducer/productActions";
 
 const ProductPage = ({ match, history }) => {
   const [qty, setQty] = useState(1);
+  const [size, setSize] = useState("L");
   const dispatch = useDispatch();
   const productDetails = useSelector((state) => state.productDetails);
   const { product } = productDetails;
-
 
   useEffect(() => {
     dispatch(listProductDetails(match.params.id));
   }, [dispatch, match]);
 
   const addToCartHandler = () => {
-    history.push(`/cart/${match.params.id}?qty=${qty}`);
+    history.push(`/cart/${match.params.id}?qty=${qty}?size=${size}`);
   };
-
   return (
     <>
       <WithNavbar />
-      <Container>
+      <Container className="pb-3">
         <Link className="btn btn-outline-secondary my-3  rounded" to="/">
           Go back
         </Link>
         <Row>
-          <Col md={6}>
-            <Image src={product.image} alt={product.name} fluid />
+          <Col md={7}>
+            <Image src={product.image} alt={product.name} fluid rounded />
           </Col>
-          <Col md={3}>
+
+          <Col md={5}>
             <ListGroup variant="flush">
               <ListGroup.Item>
                 <h3>{product.name}</h3>
@@ -54,62 +54,78 @@ const ProductPage = ({ match, history }) => {
                   text={`${product.numReviews} reviews`}
                 />
               </ListGroup.Item>
-              <ListGroup.Item>Price: &euro;{product.price}</ListGroup.Item>
+              <ListGroup.Item>Brand: {product.brand}</ListGroup.Item>
               <ListGroup.Item>
                 Description: {product.description}
               </ListGroup.Item>
             </ListGroup>
-          </Col>
-          <Col md={3}>
-            <Card>
-              <ListGroup variant="flush">
+            <ListGroup variant="flush">
+              <ListGroup.Item>
+                <Row>
+                  <Col>Price:</Col>
+                  <Col>
+                    <strong>&euro;{product.price}</strong>
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Row>
+                  <Col>Status</Col>
+                  <Col>
+                    {product.countInStock > 0 ? "In Stock" : "Out of stock"}
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+              {product.countInStock > 0 && (
                 <ListGroup.Item>
                   <Row>
-                    <Col>Price:</Col>
-                    <Col>
-                      <strong>&euro;{product.price}</strong>
+                    <Col md={8}>Qty:</Col>
+                    <Col md={4}>
+                      <Form.Control
+                        as="select"
+                        value={qty}
+                        onChange={(e) => setQty(e.target.value)}
+                      >
+                        {[...Array(product.countInStock).keys()].map((x) => (
+                          <option key={x + 1} value={x + 1}>
+                            {x + 1}
+                          </option>
+                        ))}
+                      </Form.Control>
                     </Col>
                   </Row>
                 </ListGroup.Item>
-                <ListGroup.Item>
-                  <Row>
-                    <Col>Status</Col>
-                    <Col>
-                      {product.countInStock > 0 ? "In Stock" : "Out of stock"}
-                    </Col>
-                  </Row>
-                </ListGroup.Item>
-                {product.countInStock > 0 && (
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Qty:</Col>
-                      <Col>
-                        <Form.Control
-                          as="select"
-                          value={qty}
-                          onChange={(e) => setQty(e.target.value)}
-                        >
-                          {[...Array(product.countInStock).keys()].map((x) => (
-                            <option key={x + 1} value={x + 1}>
-                              {x + 1}
-                            </option>
-                          ))}
-                        </Form.Control>
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-                )}
-                <ListGroup.Item>
-                  <Button
-                    onClick={addToCartHandler}
-                    className="btn-block rounded"
-                    disabled={product.countInStock === 0}
-                  >
-                    Add To Cart
-                  </Button>
-                </ListGroup.Item>
-              </ListGroup>
-            </Card>
+              )}
+              <ListGroup.Item>
+                <Row>
+                  <Col md={8}>Size:</Col>
+                  <Col md={4}>
+                    {product.sizes && (
+                      <Form.Control
+                        as="select"
+                        value={size}
+                        onChange={(e) => setSize(e.target.value)}
+                      >
+                        {product.sizes.map((size, idx) => (
+                          <option key={idx} value={size}>
+                            {size}
+                          </option>
+                        ))}
+                      </Form.Control>
+                    )}
+                  </Col>
+                </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                <Button
+                  onClick={addToCartHandler}
+                  className="btn-block rounded"
+                  disabled={product.countInStock === 0}
+                >
+                  Add To Cart
+                </Button>
+              </ListGroup.Item>
+            </ListGroup>
           </Col>
         </Row>
       </Container>

@@ -1,43 +1,16 @@
 import express from "express";
-import expressAsyncHandler from "express-async-handler";
-import Product from "../models/productModel.js";
+import {
+  getProducts,
+  getProductById,
+  getProductsByGender,
+} from "../controllers/productController.js";
 
 const router = express.Router();
 
-// fetch all products based on gender from mongoDB
-// GET to '/api/products
-// @ access Public route
-router.get(
-  "/gender/:sex",
-  expressAsyncHandler(async (req, res) => {
-    const products = await Product.aggregate([
-      { $match: { sex: `${req.params.sex}` } },
-    ]);
-    res.json(products);
-  })
-);
+router.route("/").get(getProducts);
 
-router.get(
-  "/",
-  expressAsyncHandler(async (req, res) => {
-    const products = await Product.find({});
-    res.json(products);
-  })
-);
-// fetch single product from mongoDB
-// GET to '/api/products/:id
-// @ access Public route
-router.get(
-  "/:id",
-  expressAsyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id);
-    if (product) {
-      res.json(product);
-    } else {
-      res.status(404);
-      throw new Error("Product not found");
-    }
-  })
-);
+router.route("/:id").get(getProductById);
+
+router.route("/gender/:sex").get(getProductsByGender);
 
 export default router;
