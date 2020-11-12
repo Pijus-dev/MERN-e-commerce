@@ -1,6 +1,9 @@
 import { cartActionTypes } from "./cartActionTypes";
 
-const cartReducer = (state = { cartItems: [] }, action) => {
+const cartReducer = (
+  state = { cartItems: [], shippingAddress: {} },
+  action
+) => {
   switch (action.type) {
     case cartActionTypes.ADD_ITEM_TO_CART:
       const itemToAdd = action.payload;
@@ -28,8 +31,19 @@ const cartReducer = (state = { cartItems: [] }, action) => {
           (item) => item.product !== action.payload
         ),
       };
+    case cartActionTypes.SAVE_SHIPPING_ADDRESS:
+      return {
+        ...state,
+        shippingAddress: action.payload,
+      };
+    case cartActionTypes.SAVE_PAYMENT_METHOD:
+      return {
+        ...state,
+        paymentMethod: action.payload,
+      };
     default:
       return state;
   }
 };
+
 export default cartReducer;

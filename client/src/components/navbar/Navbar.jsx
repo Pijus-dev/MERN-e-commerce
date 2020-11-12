@@ -1,21 +1,31 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { Navbar, Nav, Container } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { ReactComponent as Logo1 } from "../../img/logo2.svg";
+import Login from "../login/Login";
+import Register from "../register/Register";
 
 import { logout } from "../../redux/userReducer/userActions";
 
 import "./navbar.scss";
 
 const WithNavbar = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   const dispatch = useDispatch();
   const logoutHandler = () => {
     dispatch(logout());
+  };
+
+  const toggleModal = () => {
+    setShowRegister(true);
+    setShowModal(false);
   };
   return (
     <>
@@ -40,7 +50,10 @@ const WithNavbar = () => {
                 </LinkContainer>
               ) : (
                 <LinkContainer to>
-                  <Nav.Link style={{ color: "white" }}>
+                  <Nav.Link
+                    style={{ color: "white" }}
+                    onClick={() => setShowModal(true)}
+                  >
                     <i className="fas fa-user"></i>Sign In
                   </Nav.Link>
                 </LinkContainer>
@@ -52,6 +65,18 @@ const WithNavbar = () => {
               )}
             </Nav>
           </Navbar.Collapse>
+          {showRegister ? (
+            <Register
+              showRegister={showRegister}
+              setShowRegister={setShowRegister}
+            />
+          ) : (
+            <Login
+              showModal={showModal}
+              setShowModal={setShowModal}
+              handleChange={toggleModal}
+            />
+          )}
         </Container>
       </Navbar>
     </>

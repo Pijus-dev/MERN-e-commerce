@@ -1,3 +1,5 @@
+$btn-color: #fa4616;
+$btn-hover: darken($btn-color, 8%);
 .checkoutCard {
   background: black !important;
   border-radius: 10px;
@@ -23,6 +25,10 @@
     border-radius: 40px;
     letter-spacing: 0.2rem;
     font-size: 0.8rem;
+
+    &:hover {
+      background: $btn-hover;
+    }
   }
 }
 .list-group-item {

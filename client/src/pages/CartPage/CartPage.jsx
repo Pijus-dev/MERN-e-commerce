@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import WithNavbar from "../../components/navbar/Navbar";
-import Visa from "../../img/cards/visa.svg";
-import Master from "../../img/cards/master.svg";
-import Paypal from "../../img/cards/paypal.svg";
+import Login from "../../components/login/Login";
+import Register from "../../components/register/Register";
+import Checkout from "../../components/checkout/Checkout";
 
 import "./cartpage.scss";
 
@@ -23,6 +23,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, removeFromCart } from "../../redux/cartReducer/cartActions";
 
 const CartPage = ({ match, location, history }) => {
+  const [showModal, setShowModal] = useState(false);
+  const [showRegister, setShowRegister] = useState(false);
+
   const productId = match.params.id;
 
   const urlParams = location.search.split("=");
@@ -33,6 +36,9 @@ const CartPage = ({ match, location, history }) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
   const { cartItems } = cart;
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   useEffect(() => {
     if (productId) {
       dispatch(addToCart(productId, qty, size));
@@ -43,7 +49,11 @@ const CartPage = ({ match, location, history }) => {
     dispatch(removeFromCart(id));
   };
   const checkoutHandler = () => {
-    history.push("/login?redirect=shipping");
+    history.push("/shipping");
+  };
+  const toggleModal = () => {
+    setShowRegister(true);
+    setShowModal(false);
   };
   return (
     <>
@@ -124,29 +134,26 @@ const CartPage = ({ match, location, history }) => {
               </ListGroup>
             )}
           </Col>
-          <Col md={4} className="checkoutCard p-5">
-            <h2 className="text-white">Order Summary</h2>
-            <div className="orderInfo my-3">
-              <span className="text-white">
-                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
-              </span>
-              <span className="text-white">
-                &euro;
-                {cartItems
-                  .reduce((acc, item) => acc + item.qty * item.price, 0)
-                  .toFixed(2)}
-              </span>
-            </div>
-            <Button onClick={checkoutHandler} type="button">
-              Checkout
-            </Button>
-            <div className="paymentCard">
-              <img src={Visa} alt="visa" />
-              <img src={Master} alt="visa" />
-              <img src={Paypal} alt="visa" />
-            </div>
-          </Col>
+          <Checkout
+            cartItems={cartItems}
+            userInfo={userInfo}
+            setShowModal={setShowModal}
+            checkoutHandler={checkoutHandler}
+            text="Checkout"
+          />
         </Row>
+        {showRegister ? (
+          <Register
+            showRegister={showRegister}
+            setShowRegister={setShowRegister}
+          />
+        ) : (
+          <Login
+            showModal={showModal}
+            setShowModal={setShowModal}
+            handleChange={toggleModal}
+          />
+        )}
       </Container>
     </>
   );

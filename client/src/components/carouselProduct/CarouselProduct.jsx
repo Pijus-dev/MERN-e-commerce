@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 import "./carouselProduct.scss"
 
 const CarouselProduct = ({ item }) => {
-  const { _id, image, name, price } = item;
+  const { _id, image, name, price, sex } = item;
   return (
     <div>
-      <Link to={`/product/${_id}`}>
+      <Link to={`/product/${sex}/${_id}`}>
         <div className="product">
           <div
             className="productImage"

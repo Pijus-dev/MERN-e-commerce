@@ -35,7 +35,10 @@ const ProductPage = ({ match, history }) => {
     <>
       <WithNavbar />
       <Container className="pb-3">
-        <Link className="btn btn-outline-secondary my-3  rounded" to="/">
+        <Link
+          className="btn btn-outline-secondary my-3  rounded"
+          to={`/products/gender/${match.params.gender}`}
+        >
           Go back
         </Link>
         <Row>
