@@ -4,6 +4,7 @@ import HomePage from "../src/pages/HomePage/HomePage";
 import ProductPage from "../src/pages/ProductPage/ProductPage";
 import CartPage from "../src/pages/CartPage/CartPage";
 import ProductsPage from "../src/pages/ProductsPage/ProductsPage";
+import ProfilePage from "../src/pages/ProfilePage/ProfilePage";
 
 import { Switch, Route } from "react-router-dom";
 
@@ -16,6 +17,7 @@ function App() {
           <Route path="/product/:id" component={ProductPage} />
           <Route path="/cart/:id?" component={CartPage} />
           <Route path="/products/gender/:sex" component={ProductsPage} />
+          <Route path="/profile" component={ProfilePage} />
         </Switch>
       </main>
     </>

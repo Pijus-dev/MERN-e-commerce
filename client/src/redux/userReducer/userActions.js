@@ -1,6 +1,8 @@
 import {
   userActionLoginTypes,
   userActionRegisterTypes,
+  userActionDetailsTypes,
+  userActionUpdateTypes,
 } from "./userActionTypes";
 import axios from "axios";
 
@@ -58,7 +60,7 @@ export const register = (name, email, password) => async (dispatch) => {
       },
       config
     );
-    
+
     dispatch({
       type: userActionRegisterTypes.USER_REGISTER_SUCCESS,
       payload: data,
@@ -73,6 +75,70 @@ export const register = (name, email, password) => async (dispatch) => {
   } catch (e) {
     dispatch({
       type: userActionRegisterTypes.USER_REGISTER_FAIL,
+      payload:
+        e.response && e.response.data.message
+          ? e.response.data.message
+          : e.message,
+    });
+  }
+};
+
+export const getUserDetails = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: userActionDetailsTypes.USER_DETAILS_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.get(`/api/users/${id}`, config);
+
+    dispatch({
+      type: userActionDetailsTypes.USER_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    dispatch({
+      type: userActionDetailsTypes.USER_DETAILS_FAIL,
+      payload:
+        e.response && e.response.data.message
+          ? e.response.data.message
+          : e.message,
+    });
+  }
+};
+
+export const updateUserProfile = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: userActionUpdateTypes.USER_UPDATE_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(`/api/users/profile`, user, config);
+
+    dispatch({
+      type: userActionUpdateTypes.USER_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    dispatch({
+      type: userActionUpdateTypes.USER_UPDATE_FAIL,
       payload:
         e.response && e.response.data.message
           ? e.response.data.message

@@ -1,9 +1,16 @@
-import React, { useState } from "react";
-import { Modal, Form, Button, Row, Col, Alert } from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Form, Button, Row, Col, Alert, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { register } from "../../redux/userReducer/userActions";
+import {
+  getUserDetails,
+  updateUserProfile,
+} from "../../redux/userReducer/userActions";
 
-const Register = ({ showRegister, setShowRegister }) => {
+import { userActionUpdateTypes } from "../../redux/userReducer/userActionTypes";
+
+import WithNavbar from "../../components/navbar/Navbar";
+
+const ProfilePage = () => {
   const [userInput, setUserInput] = useState({
     name: "",
     email: "",
@@ -13,68 +20,57 @@ const Register = ({ showRegister, setShowRegister }) => {
   const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [inputBorder, setInputBorder] = useState(false);
-  const dispatch = useDispatch();
+
   const { name, email, password, confirmPassword } = userInput;
-  const userRegister = useSelector((state) => state.userRegister);
-  const { error } = userRegister;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const userDetails = useSelector((state) => state.userDetails);
+  const { user } = userDetails;
+
+  const dispatch = useDispatch();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
     setUserInput({ ...userInput, [name]: value.trim() });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
-
     if (password !== confirmPassword) {
       setErrorMessage("Passwords do not match");
-      return false;
-    }
-
-    if (
-      name !== "" &&
-      email !== "" &&
-      password !== "" &&
-      confirmPassword !== ""
-    ) {
-      dispatch(register(name, email, password));
-      setMessage("You have successfully registered");
-
-      setTimeout(() => {
-        setShowRegister(false);
-      }, 2500);
     } else {
-      setInputBorder(true);
+      dispatch(
+        updateUserProfile({
+          id: user._id,
+          name,
+          email,
+          password,
+        })
+      );
+      setMessage("You have successfully updated your profile");
     }
   };
-
-  const closeModal = () => {
-    setShowRegister(false);
-    setInputBorder(false);
-  };
-
+  useEffect(() => {
+    if (!user || !user.name) {
+      dispatch({ type: userActionUpdateTypes.USER_UPDATE_RESET });
+      dispatch(getUserDetails("profile"));
+    } else {
+      setUserInput({
+        name: user.name,
+        email: user.email,
+      });
+    }
+  }, [dispatch, user, userInfo]);
   return (
-    <Row>
-      <Col>
-        <Modal
-          className="my-5"
-          show={showRegister}
-          onHide={closeModal}
-          size="md"
-        >
-          <Modal.Header closeButton>
-            <Modal.Title id="example-custom-modal-styling-title">
-              <h2>Register</h2>
-            </Modal.Title>
-          </Modal.Header>
-          <Form onSubmit={handleSubmit}>
-            <Modal.Body>
-              {error && (
-                <Alert className="rounded" variant="danger">
-                  {error}
-                </Alert>
-              )}
+    <>
+      <WithNavbar />
+      <Container className="my-4">
+        <Row>
+          <Col md={4}>
+            <h2>Profile</h2>
+            <Form onSubmit={handleSubmit}>
               {errorMessage && (
                 <Alert className="rounded" variant="danger">
                   {errorMessage}
@@ -137,21 +133,22 @@ const Register = ({ showRegister, setShowRegister }) => {
                   } rounded`}
                 />
               </Form.Group>
-            </Modal.Body>
-            <Modal.Footer>
               <Button
                 type="submit"
                 variant="dark"
                 className="btn btn-block rounded"
               >
-                Register
+                Update
               </Button>
-            </Modal.Footer>
-          </Form>
-        </Modal>
-      </Col>
-    </Row>
+            </Form>
+          </Col>
+          <Col md={8}>
+            <h2>My Orders</h2>
+          </Col>
+        </Row>
+      </Container>
+    </>
   );
 };
 
-export default Register;
+export default ProfilePage;

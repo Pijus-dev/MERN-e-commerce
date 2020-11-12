@@ -10,6 +10,7 @@ const Login = ({ showModal, setShowModal, handleChange }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState();
+  const [inputBorder, setInputBorder] = useState(false);
 
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
@@ -18,23 +19,26 @@ const Login = ({ showModal, setShowModal, handleChange }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (email !== "" && password !== "") {
+      dispatch(login(email, password));
 
-    dispatch(login(email, password));
-    setMessage("You have successfully signed in");
-
-    setTimeout(() => {
-      setShowModal(false);
-    }, 2500);
+      setMessage("you have successfully signed in");
+      setTimeout(() => {
+        setShowModal(false);
+      }, 2500);
+    } else {
+      setInputBorder(true);
+    }
   };
+  const closeModal = () => {
+    setShowModal(false);
+    setInputBorder(false);
+  };
+
   return (
     <Row>
       <Col>
-        <Modal
-          className="my-5"
-          show={showModal}
-          onHide={() => setShowModal(false)}
-          size="md"
-        >
+        <Modal className="my-5" show={showModal} onHide={closeModal} size="md">
           <Modal.Header closeButton>
             <Modal.Title id="example-custom-modal-styling-title">
               <h2>Sign In</h2>
@@ -55,22 +59,25 @@ const Login = ({ showModal, setShowModal, handleChange }) => {
               <Form.Group>
                 <Form.Label>Email address</Form.Label>
                 <Form.Control
+                  className={`${
+                    inputBorder ? "border border-danger" : "none"
+                  } rounded`}
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  rounded
+                  onChange={(e) => setEmail(e.target.value.trim())}
                   type="email"
                   placeholder="Enter email"
-                  className="rounded"
                 />
               </Form.Group>
               <Form.Group controlId="formBasicPassword">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => setPassword(e.target.value.trim())}
                   type="password"
                   placeholder="Password"
-                  className="rounded"
+                  className={`${
+                    inputBorder ? "border border-danger" : "none"
+                  } rounded`}
                 />
               </Form.Group>
             </Modal.Body>

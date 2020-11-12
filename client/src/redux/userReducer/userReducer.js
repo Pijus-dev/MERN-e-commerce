@@ -1,6 +1,8 @@
 import {
   userActionLoginTypes,
   userActionRegisterTypes,
+  userActionDetailsTypes,
+  userActionUpdateTypes,
 } from "./userActionTypes";
 
 const userLoginReducer = (state = {}, action) => {
@@ -49,4 +51,56 @@ const userRegisterReducer = (state = {}, action) => {
   }
 };
 
-export { userLoginReducer, userRegisterReducer };
+const userDetailsReducer = (state = { user: {} }, action) => {
+  switch (action.type) {
+    case userActionDetailsTypes.USER_DETAILS_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case userActionDetailsTypes.USER_DETAILS_SUCCESS:
+      return {
+        loading: false,
+        user: action.payload,
+      };
+    case userActionDetailsTypes.USER_DETAILS_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
+const userUpdateProfileReducer = (state = {}, action) => {
+  switch (action.type) {
+    case userActionUpdateTypes.USER_UPDATE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case userActionUpdateTypes.USER_UPDATE_SUCCESS:
+      return {
+        success: true,
+        loading: false,
+        userInfo: action.payload,
+      };
+    case userActionUpdateTypes.USER_UPDATE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case userActionUpdateTypes.USER_UPDATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+export {
+  userLoginReducer,
+  userRegisterReducer,
+  userDetailsReducer,
+  userUpdateProfileReducer,
+};
