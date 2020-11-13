@@ -5,6 +5,10 @@
   color: white;
   font-weight: bolder !important;
   text-transform: capitalize;
+
+  @media screen and (max-width: 450px) {
+    font-size: 2.8rem;
+  }
 }
 .backgroundImage {
   height: 70vh;
@@ -19,7 +23,6 @@
   z-index: 0;
 
   .title {
-    width: 60vw;
     text-align: center;
     h1 {
       @include fontSize;
@@ -71,4 +74,11 @@ h2 {
 .slick-prev:before,
 .slick-next:before {
   opacity: 1;
+}
+
+.productRow {
+  @media screen and (max-width: 750px) {
+    display: flex !important;
+    justify-content: center !important;
+  }
 }

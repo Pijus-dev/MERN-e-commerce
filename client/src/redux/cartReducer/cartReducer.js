@@ -11,7 +11,8 @@ const cartReducer = (
       const existItem = state.cartItems.find(
         (item) => item.product === itemToAdd.product
       );
-      if (existItem) {
+
+      if (existItem && existItem.sizes === itemToAdd.sizes) {
         return {
           ...state,
           cartItems: state.cartItems.map((item) =>

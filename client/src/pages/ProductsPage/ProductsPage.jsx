@@ -9,7 +9,7 @@ import Header from "../../components/header/Header";
 import Men from "../../img/menBackground.jpg";
 import Women from "../../img/womenBackground.jpg";
 
-import { Col, Container, Row } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import Slider from "react-slick";
 
 import "slick-carousel/slick/slick.css";
@@ -41,7 +41,7 @@ const ProductsPage = ({ match }) => {
         },
       },
       {
-        breakpoint: 600,
+        breakpoint: 990,
         settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
@@ -49,7 +49,7 @@ const ProductsPage = ({ match }) => {
         },
       },
       {
-        breakpoint: 480,
+        breakpoint: 600,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -85,31 +85,35 @@ const ProductsPage = ({ match }) => {
           })`,
         }}
       >
-        <div className="title">
-          {match.params.sex === "male" ? (
-            <h1>Men's Backcountry</h1>
-          ) : (
-            <h1>Women's Backcountry</h1>
-          )}
-          <span>Touring</span>
-        </div>
-        <div style={{ marginTop: "20px", outline: "none" }}>
-          {showAll ? (
-            <CustomButton onClick={() => setShowAll(!showAll)}>
-              Preview
-            </CustomButton>
-          ) : (
-            <CustomButton onClick={() => setShowAll(!showAll)}>
-              See All
-            </CustomButton>
-          )}
-        </div>
+        <Row>
+          <Col className="d-flex justify-content-center align-items-center flex-column">
+            <div className="title">
+              {match.params.sex === "male" ? (
+                <h1>Men's Backcountry</h1>
+              ) : (
+                <h1>Women's Backcountry</h1>
+              )}
+              <span>Touring</span>
+            </div>
+            <div style={{ marginTop: "20px", outline: "none" }}>
+              {showAll ? (
+                <CustomButton onClick={() => setShowAll(!showAll)}>
+                  Preview
+                </CustomButton>
+              ) : (
+                <CustomButton onClick={() => setShowAll(!showAll)}>
+                  See All
+                </CustomButton>
+              )}
+            </div>
+          </Col>
+        </Row>
       </div>
       {showAll ? (
         <Container className="my-5">
           <Row>
             {products.map((item) => (
-              <Col>
+              <Col className="productRow">
                 <CarouselProduct item={item} />
               </Col>
             ))}

@@ -7,7 +7,6 @@ import "./carouselProduct.scss"
 const CarouselProduct = ({ item }) => {
   const { _id, image, name, price, sex } = item;
   return (
-    <div>
       <Link to={`/product/${sex}/${_id}`}>
         <div className="product">
           <div
@@ -20,7 +19,6 @@ const CarouselProduct = ({ item }) => {
           </div>
         </div>
       </Link>
-    </div>
   );
 };
 

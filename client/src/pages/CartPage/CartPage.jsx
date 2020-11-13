@@ -39,6 +39,15 @@ const CartPage = ({ match, location, history }) => {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  // calculate prices
+  const itemsPrice = cartItems
+    .reduce((acc, item) => acc + item.qty * item.price, 0)
+    .toFixed(2);
+
+  const shippingPrice = itemsPrice > 100 ? 0 : 50;
+  const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
+  const total = Number(itemsPrice) + Number(shippingPrice) + Number(taxPrice);
+
   useEffect(() => {
     if (productId) {
       dispatch(addToCart(productId, qty, size));
@@ -73,7 +82,9 @@ const CartPage = ({ match, location, history }) => {
                     <Row>
                       <Link></Link>
                       <Col md={4}>
-                        <LinkContainer to={`/product/${item.product}`}>
+                        <LinkContainer
+                          to={`/product/${item.sex}/${item.product}`}
+                        >
                           <Image
                             src={item.image}
                             alt={item.name}
@@ -85,30 +96,13 @@ const CartPage = ({ match, location, history }) => {
                       <Col md={8}>
                         <Row>
                           <Col md={10}>
-                            <Link to={`/product/${item.product}`}>
+                            <Link to={`/product/${item.sex}/${item.product}`}>
                               {item.name}
                             </Link>
                           </Col>
                           <Col md={2}>&euro;{item.price}</Col>
                           <Col md={3} className="my-2">
-                            <Form.Control
-                              as="select"
-                              value={item.qty}
-                              onChange={(e) =>
-                                dispatch(
-                                  addToCart(
-                                    item.product,
-                                    Number(e.target.value)
-                                  )
-                                )
-                              }
-                            >
-                              {[...Array(item.countInStock).keys()].map((x) => (
-                                <option key={x + 1} value={x + 1}>
-                                  {x + 1}
-                                </option>
-                              ))}
-                            </Form.Control>
+                            <p className="my-2"> Quantity: {item.qty}</p>
                           </Col>
                           <Col md={1}>
                             <Button
@@ -124,7 +118,7 @@ const CartPage = ({ match, location, history }) => {
                         </Row>
                         <Row>
                           <Col md={3}>
-                            <p className="my-2 pl-1">Size: {item.sizes}</p>
+                            <p className="my-1 pl-1">Size: {item.sizes}</p>
                           </Col>
                         </Row>
                       </Col>
@@ -136,6 +130,10 @@ const CartPage = ({ match, location, history }) => {
           </Col>
           <Checkout
             cartItems={cartItems}
+            itemsPrice={itemsPrice}
+            shippingPrice={shippingPrice}
+            taxPrice={taxPrice}
+            total={total}
             userInfo={userInfo}
             setShowModal={setShowModal}
             checkoutHandler={checkoutHandler}

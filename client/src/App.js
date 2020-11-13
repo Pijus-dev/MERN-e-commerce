@@ -8,6 +8,7 @@ import ProfilePage from "../src/pages/ProfilePage/ProfilePage";
 import ShippingPage from "../src/pages/ShippingPage/ShippingPage";
 import PaymentPage from "../src/pages/PaymenPage/PaymentPage";
 import PlaceOrder from "../src/pages/PlaceOrder/PlaceOrder";
+import OrderPage from "../src/pages/OrderPage/OrderPage";
 
 import { Switch, Route } from "react-router-dom";
 
@@ -19,6 +20,7 @@ function App() {
           <Route exact path="/" component={HomePage} />
           <Route path="/product/:gender/:id" component={ProductPage} />
           <Route path="/cart/:id?" component={CartPage} />
+          <Route path="/order/:id" component={OrderPage} />
           <Route path="/shipping" component={ShippingPage} />
           <Route path="/payment" component={PaymentPage} />
           <Route path="/placeorder" component={PlaceOrder} />

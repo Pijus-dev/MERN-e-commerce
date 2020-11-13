@@ -2,9 +2,13 @@ import React from "react";
 
 import { Col, Button } from "react-bootstrap";
 
+import { PayPalButton } from "react-paypal-button-v2";
+
 import Visa from "../../img/cards/visa.svg";
 import Master from "../../img/cards/master.svg";
 import Paypal from "../../img/cards/paypal.svg";
+
+import { useSelector } from "react-redux";
 
 const Checkout = ({
   cartItems,
@@ -12,15 +16,31 @@ const Checkout = ({
   setShowModal,
   checkoutHandler,
   text,
+  itemsPrice,
+  shippingPrice,
+  taxPrice,
+  total,
+  amount,
+  onSuccess
 }) => {
-  
-  // calculate prices
-  const itemsPrice = cartItems
-    .reduce((acc, item) => acc + item.qty * item.price, 0)
-    .toFixed(2);
+  const orderDetails = useSelector((state) => state.orderDetails);
+  const { success } = orderDetails;
 
-  const shippingPrice = itemsPrice > 100 ? 0 : 50;
-  const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
+  const renderButtons = () => {
+    if (userInfo && success) {
+      return <PayPalButton amount={amount} onSuccess={onSuccess}/>;
+    } else if (userInfo) {
+      return (
+        <Button onClick={checkoutHandler} type="button">
+          {text}
+        </Button>
+      );
+    } else {
+      <Button onClick={() => setShowModal(true)} type="button">
+        Sign In
+      </Button>;
+    }
+  };
 
   return (
     <Col md={4} className="checkoutCard p-5">
@@ -42,15 +62,11 @@ const Checkout = ({
         <span className="text-white">Tax Fee:</span>
         <span className="text-white">&euro;{taxPrice}</span>
       </div>
-      {userInfo ? (
-        <Button onClick={checkoutHandler} type="button">
-          {text}
-        </Button>
-      ) : (
-        <Button onClick={() => setShowModal(true)} type="button">
-          Sign In
-        </Button>
-      )}
+      <div className="orderInfo my-3">
+        <span className="text-white">Total:</span>
+        <span className="text-white">&euro; {total.toFixed(2)}</span>
+      </div>
+      {renderButtons()}
       <div className="paymentCard">
         <img src={Visa} alt="visa" />
         <img src={Master} alt="visa" />

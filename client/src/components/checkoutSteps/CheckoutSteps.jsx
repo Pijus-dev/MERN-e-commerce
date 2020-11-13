@@ -4,8 +4,6 @@ import { LinkContainer } from "react-router-bootstrap";
 
 const CheckoutSteps = ({ step1, step2, step3, step4 }) => {
   const url = window.location.pathname;
-  console.log(url);
-
   return (
     <Nav className="justify-content-center mb-4">
       <Nav.Item>

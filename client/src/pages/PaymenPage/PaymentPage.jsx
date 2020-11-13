@@ -7,6 +7,7 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { savePaymentMethod } from "../../redux/cartReducer/cartActions";
 
+
 const PaymentPage = ({ history }) => {
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
