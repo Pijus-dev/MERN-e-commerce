@@ -4,6 +4,8 @@ import { Col, Button } from "react-bootstrap";
 
 import { PayPalButton } from "react-paypal-button-v2";
 
+import StripeButton from "../stripeButton/StripeButton";
+
 import Visa from "../../img/cards/visa.svg";
 import Master from "../../img/cards/master.svg";
 import Paypal from "../../img/cards/paypal.svg";
@@ -20,15 +22,18 @@ const Checkout = ({
   shippingPrice,
   taxPrice,
   total,
-  amount,
-  onSuccess
+  onSuccess,
 }) => {
   const orderDetails = useSelector((state) => state.orderDetails);
+  const cartMethod = useSelector((state) => state.cart);
+  const { paymentMethod } = cartMethod;
   const { success } = orderDetails;
 
   const renderButtons = () => {
-    if (userInfo && success) {
-      return <PayPalButton amount={amount} onSuccess={onSuccess}/>;
+    if (paymentMethod === "PayPal" && success) {
+      return <PayPalButton amount={total} onSuccess={onSuccess} />;
+    } else if (paymentMethod === "stripe" && success) {
+      return <StripeButton price={total} onToken={onSuccess} />;
     } else if (userInfo) {
       return (
         <Button onClick={checkoutHandler} type="button">
@@ -36,9 +41,11 @@ const Checkout = ({
         </Button>
       );
     } else {
-      <Button onClick={() => setShowModal(true)} type="button">
-        Sign In
-      </Button>;
+      return (
+        <Button onClick={() => setShowModal(true)} type="button">
+          Sign In
+        </Button>
+      );
     }
   };
 
@@ -64,7 +71,7 @@ const Checkout = ({
       </div>
       <div className="orderInfo my-3">
         <span className="text-white">Total:</span>
-        <span className="text-white">&euro; {total.toFixed(2)}</span>
+        <span className="text-white">&euro; {total}</span>
       </div>
       {renderButtons()}
       <div className="paymentCard">

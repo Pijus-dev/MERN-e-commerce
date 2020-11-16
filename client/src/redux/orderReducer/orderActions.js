@@ -97,6 +97,57 @@ export const payOrder = (orderId, paymentResult) => async (
       paymentResult,
       config
     );
+    dispatch({
+      type: orderActionPayTypes.ORDER_PAY_SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    dispatch({
+      type: orderActionPayTypes.ORDER_PAY_FAIL,
+      payload:
+        e.response && e.response.data.message
+          ? e.response.data.message
+          : e.message,
+    });
+  }
+};
+
+export const stripePayOrder = (orderId, price, paymentResult) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({
+      type: orderActionPayTypes.ORDER_PAY_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+    console.log(paymentResult);
+
+    // const config = {
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${userInfo.token}`,
+    //   },
+    // };
+    const { data } = await axios({
+      method: "put",
+      url: `/api/orders/${orderId}/stripe-payment`,
+      data: {
+        token: paymentResult,
+        amount: Math.round(price * 100),
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    });
+    dispatch({
+      type: orderActionPayTypes.ORDER_PAY_SUCCESS,
+      payload: data,
+    });
   } catch (e) {
     dispatch({
       type: orderActionPayTypes.ORDER_PAY_FAIL,

@@ -1,0 +1,18 @@
+$btn-color: #fa4616;
+$btn-hover: darken($btn-color, 8%);
+.btn {
+  position: absolute;
+  bottom: 50px;
+  border: none;
+  color: white;
+  padding: 10px 0;
+  background: $btn-color;
+  width: 80%;
+  border-radius: 40px;
+  letter-spacing: 0.2rem;
+  font-size: 0.8rem;
+
+  &:hover {
+    background: $btn-hover;
+  }
+}

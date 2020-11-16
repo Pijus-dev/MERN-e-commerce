@@ -20,7 +20,7 @@ $btn-hover: darken($btn-color, 8%);
   .btn {
     position: absolute;
     bottom: 50px;
-    background: #fa4616;
+    background: $btn-color;
     width: 80%;
     border-radius: 40px;
     letter-spacing: 0.2rem;

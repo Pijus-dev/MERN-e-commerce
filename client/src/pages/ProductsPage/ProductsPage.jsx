@@ -61,6 +61,7 @@ const ProductsPage = ({ match }) => {
   useEffect(() => {
     dispatch(listProducts(match.params.sex));
   }, [match, dispatch]);
+  
   useEffect(() => {
     if (products.length > 0) {
       const filteredJackets = products.filter(

@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getOrderDetails,
   payOrder,
+  stripePayOrder
 } from "../../redux/orderReducer/orderActions";
 
 import { orderActionPayTypes } from "../../redux/orderReducer/orderActionTypes";
@@ -23,12 +24,16 @@ const OrderPage = ({ match }) => {
   const orderDetails = useSelector((state) => state.orderDetails);
   const { order, error, loading } = orderDetails;
 
+  const cartMethod = useSelector((state) => state.cart);
+  const { paymentMethod } = cartMethod;
+
   const orderPay = useSelector((state) => state.orderPay);
   const { success: successPay, loading: loadingPay } = orderPay;
 
   const addPayPalScript = async () => {
     const { data: clientId } = await axios.get("/api/config/paypal");
     const script = document.createElement("script");
+
     script.type = "text/javascript";
     script.src = `https://www.paypal.com/sdk/js?client-id=${clientId}`;
     script.async = true;
@@ -39,6 +44,7 @@ const OrderPage = ({ match }) => {
   };
 
   const dispatch = useDispatch();
+
   useEffect(() => {
     if (!order || successPay) {
       dispatch({
@@ -55,10 +61,17 @@ const OrderPage = ({ match }) => {
   }, [dispatch, successPay, orderId, order]);
 
   const successPaymentHandler = (paymentResult) => {
-    console.log(paymentResult);
-
     dispatch(payOrder(orderId, paymentResult));
   };
+
+  const paymentType = (paymentResult) => {
+    if (paymentMethod === "PayPal") {
+      successPaymentHandler(paymentResult);
+    } else if (paymentMethod === "stripe") {
+      dispatch(stripePayOrder(orderId, order.totalPrice, paymentResult));
+    }
+  };
+
   return (
     <>
       <WithNavbar />
@@ -133,7 +146,7 @@ const OrderPage = ({ match }) => {
                           </Col>
                           <Col md={4}>
                             {item.qty} x &euro;{item.price} = &euro;
-                            {item.qty * item.price}
+                            {Math.round(item.qty * item.price, 2)}
                             <br />
                             size: {item.sizes}
                           </Col>
@@ -150,8 +163,7 @@ const OrderPage = ({ match }) => {
               shippingPrice={order.shippingPrice}
               taxPrice={order.taxPrice}
               total={order.totalPrice}
-              amount={order.totalPrice}
-              onSuccess={successPaymentHandler}
+              onSuccess={paymentType}
               text="Pay Now"
               userInfo
             />

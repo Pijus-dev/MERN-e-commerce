@@ -1,5 +1,6 @@
 import expressAsyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
+import Stripe from "stripe";
 
 // Create New Order
 // POST /api/orders
@@ -53,7 +54,7 @@ const getOrderById = expressAsyncHandler(async (req, res) => {
 });
 
 // UPDATE ORDER to paid
-// PUT /api/orders/:orderID/pay
+// PUT /api/orders/:orderID/paypal
 // Private route
 const updateOrderToPaid = expressAsyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
@@ -75,4 +76,44 @@ const updateOrderToPaid = expressAsyncHandler(async (req, res) => {
   }
 });
 
-export { addOrderItems, getOrderById, updateOrderToPaid };
+
+// UPDATE ORDER to paid
+// PUT /api/orders/:orderID/stripe-payment
+// Private route
+const stripePayment = expressAsyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+  const stripe = new Stripe("sk_test_Uuy41OYoERxtEKNffc1IAwE200uEeLnURK");
+
+  const body = {
+    source: req.body.token.id,
+    amount: req.body.amount,
+    currency: "eur",
+    metadata: {
+      email: req.body.token.email,
+      // address: req.body.address,
+      // postalCode: req.body.postalCode,
+      // city: req.body.city,
+    },
+  };
+
+  if (order) {
+    order.isPaid = true;
+    order.paidAt = Date.now();
+    const updatedOrder = await order.save();
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+
+  await stripe.charges.create(body, (stripeErr, stripeRes) => {
+    console.log(stripeErr, stripeRes);
+    if (stripeErr) {
+      res.status(500).send({ error: stripeErr });
+    } else {
+      res.status(200).send({ success: stripeRes });
+    }
+  });
+});
+
+export { addOrderItems, getOrderById, updateOrderToPaid, stripePayment };
