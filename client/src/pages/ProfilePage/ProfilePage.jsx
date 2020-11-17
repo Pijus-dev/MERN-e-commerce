@@ -1,10 +1,21 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col, Alert, Container } from "react-bootstrap";
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  Alert,
+  Container,
+  Table,
+} from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import {
   getUserDetails,
   updateUserProfile,
 } from "../../redux/userReducer/userActions";
+
+import { listMyOrders } from "../../redux/orderReducer/orderActions";
 
 import { userActionUpdateTypes } from "../../redux/userReducer/userActionTypes";
 
@@ -28,6 +39,9 @@ const ProfilePage = () => {
 
   const userDetails = useSelector((state) => state.userDetails);
   const { user } = userDetails;
+
+  const orderListMy = useSelector((state) => state.orderListMy);
+  const { orders, loading: loadingOrders, error: errorOrders } = orderListMy;
 
   const dispatch = useDispatch();
 
@@ -56,6 +70,7 @@ const ProfilePage = () => {
     if (!user || !user.name) {
       dispatch({ type: userActionUpdateTypes.USER_UPDATE_RESET });
       dispatch(getUserDetails("profile"));
+      dispatch(listMyOrders());
     } else {
       setUserInput({
         name: user.name,
@@ -68,7 +83,7 @@ const ProfilePage = () => {
       <WithNavbar />
       <Container className="my-4">
         <Row>
-          <Col md={4}>
+          <Col md={3}>
             <h2>Profile</h2>
             <Form onSubmit={handleSubmit}>
               {errorMessage && (
@@ -142,8 +157,61 @@ const ProfilePage = () => {
               </Button>
             </Form>
           </Col>
-          <Col md={8}>
+          <Col md={9}>
             <h2>My Orders</h2>
+            {errorOrders ? (
+              <Alert variant="danger">{errorMessage}</Alert>
+            ) : (
+              <Table striped bordered hover responsive className="table-sm">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>DATE</th>
+                    <th>TOTAL</th>
+                    <th>PAID</th>
+                    <th>DELIVERED</th>
+                    <th>DETAILS</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders &&
+                    orders.map((order) => (
+                      <tr key={order._id}>
+                        <td>{order._id}</td>
+                        <td>{order.createdAt.substring(0, 10)}</td>
+                        <td>&euro;{order.totalPrice}</td>
+                        <td>
+                          {order.isPaid ? (
+                            order.paidAt.substring(0, 10)
+                          ) : (
+                            <i
+                              className="fas fa-times"
+                              style={{ color: "red" }}
+                            ></i>
+                          )}
+                        </td>
+                        <td>
+                          {order.isDelivered ? (
+                            order.deliveredAt.substring(0, 10)
+                          ) : (
+                            <i
+                              className="fas fa-times"
+                              style={{ color: "red" }}
+                            ></i>
+                          )}
+                        </td>
+                        <td>
+                          <LinkContainer to={`/order/${order._id}`}>
+                            <Button className="btn-sm rounded" variant="info">
+                              Details
+                            </Button>
+                          </LinkContainer>
+                        </td>
+                      </tr>
+                    ))}
+                </tbody>
+              </Table>
+            )}
           </Col>
         </Row>
       </Container>

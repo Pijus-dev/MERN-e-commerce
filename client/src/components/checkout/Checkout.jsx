@@ -25,16 +25,17 @@ const Checkout = ({
   onSuccess,
 }) => {
   const orderDetails = useSelector((state) => state.orderDetails);
+  const { success } = orderDetails;
   const cartMethod = useSelector((state) => state.cart);
   const { paymentMethod } = cartMethod;
-  const { success } = orderDetails;
+
 
   const renderButtons = () => {
     if (paymentMethod === "PayPal" && success) {
       return <PayPalButton amount={total} onSuccess={onSuccess} />;
     } else if (paymentMethod === "stripe" && success) {
       return <StripeButton price={total} onToken={onSuccess} />;
-    } else if (userInfo) {
+    }else if (userInfo) {
       return (
         <Button onClick={checkoutHandler} type="button">
           {text}

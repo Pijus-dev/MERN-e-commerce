@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { listProducts } from "../../redux/productReducer/productActions";
+import { listProductsBySex } from "../../redux/productReducer/productActions";
 
 import CarouselProduct from "../../components/carouselProduct/CarouselProduct";
 import CustomButton from "../../components/customButton/CustomButton";
@@ -59,7 +59,7 @@ const ProductsPage = ({ match }) => {
   };
 
   useEffect(() => {
-    dispatch(listProducts(match.params.sex));
+    dispatch(listProductsBySex(match.params.sex));
   }, [match, dispatch]);
   
   useEffect(() => {

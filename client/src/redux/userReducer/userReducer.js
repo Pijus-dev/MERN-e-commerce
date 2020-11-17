@@ -3,6 +3,8 @@ import {
   userActionRegisterTypes,
   userActionDetailsTypes,
   userActionUpdateTypes,
+  userActionListTypes,
+  userActionDeleteTypes
 } from "./userActionTypes";
 
 const userLoginReducer = (state = {}, action) => {
@@ -68,6 +70,8 @@ const userDetailsReducer = (state = { user: {} }, action) => {
         loading: false,
         error: action.payload,
       };
+    case userActionDetailsTypes.USER_DETAILS_RESET:
+      return { user: {} };
     default:
       return state;
   }
@@ -98,9 +102,55 @@ const userUpdateProfileReducer = (state = {}, action) => {
   }
 };
 
+const userListReducer = (state = { users: [] }, action) => {
+  switch (action.type) {
+    case userActionListTypes.USER_LIST_REQUEST:
+      return {
+        loading: true,
+      };
+    case userActionListTypes.USER_LIST_SUCCESS:
+      return {
+        loading: false,
+        users: action.payload,
+      };
+    case userActionListTypes.USER_LIST_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case userActionListTypes.USER_LIST_RESET:
+      return { users: [] };
+    default:
+      return state;
+  }
+};
+
+const userDeleteReducer = (state = { }, action) => {
+  switch (action.type) {
+    case userActionDeleteTypes.USER_DELETE_REQUEST:
+      return {
+        loading: true,
+      };
+    case userActionDeleteTypes.USER_DELETE_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+    case userActionDeleteTypes.USER_DELETE_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
+
 export {
   userLoginReducer,
   userRegisterReducer,
   userDetailsReducer,
   userUpdateProfileReducer,
+  userListReducer,
+  userDeleteReducer
 };

@@ -9,6 +9,8 @@ import ShippingPage from "../src/pages/ShippingPage/ShippingPage";
 import PaymentPage from "../src/pages/PaymenPage/PaymentPage";
 import PlaceOrder from "../src/pages/PlaceOrder/PlaceOrder";
 import OrderPage from "../src/pages/OrderPage/OrderPage";
+import UserListPage from "../src/pages/UserListPage/UserListPage";
+import ProductListPage from "../src/pages/ProductListPage/ProductListPage";
 
 import { Switch, Route } from "react-router-dom";
 
@@ -26,6 +28,8 @@ function App() {
           <Route path="/placeorder" component={PlaceOrder} />
           <Route path="/products/gender/:sex" component={ProductsPage} />
           <Route path="/profile" component={ProfilePage} />
+          <Route path="/admin/userlist" component={UserListPage} />
+          <Route path="/admin/productlist" component={ProductListPage} />
         </Switch>
       </main>
     </>

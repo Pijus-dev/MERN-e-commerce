@@ -3,7 +3,10 @@ import {
   userActionRegisterTypes,
   userActionDetailsTypes,
   userActionUpdateTypes,
+  userActionListTypes,
+  userActionDeleteTypes,
 } from "./userActionTypes";
+import { orderActionMyOrderTypes } from "../orderReducer/orderActionTypes";
 import axios from "axios";
 
 export const login = (email, password) => async (dispatch) => {
@@ -152,4 +155,74 @@ export const logout = () => (dispatch) => {
   dispatch({
     type: userActionLoginTypes.USER_LOGOUT,
   });
+  dispatch({
+    type: userActionDetailsTypes.USER_DETAILS_RESET,
+  });
+  dispatch({
+    type: orderActionMyOrderTypes.ORDER_LIST_MY_RESET,
+  });
+  dispatch({
+    type: userActionListTypes.USER_LIST_RESET,
+  });
+};
+
+export const listUsers = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: userActionListTypes.USER_LIST_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.get(`/api/users`, config);
+
+    dispatch({
+      type: userActionListTypes.USER_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    dispatch({
+      type: userActionListTypes.USER_LIST_FAIL,
+      payload:
+        e.response && e.response.data.message
+          ? e.response.data.message
+          : e.message,
+    });
+  }
+};
+
+export const deleteUser = (id) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: userActionDeleteTypes.USER_DELETE_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    await axios.delete(`/api/users/${id}`, config);
+
+    dispatch({
+      type: userActionDeleteTypes.USER_DELETE_SUCCESS,
+    });
+  } catch (e) {
+    dispatch({
+      type: userActionDeleteTypes.USER_DELETE_FAIL,
+      payload:
+        e.response && e.response.data.message
+          ? e.response.data.message
+          : e.message,
+    });
+  }
 };

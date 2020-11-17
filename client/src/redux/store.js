@@ -5,6 +5,7 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import {
   productReducer,
   productDetailsReducer,
+  productDeleteReducer
 } from "./productReducer/productReducer";
 
 import cartReducer from "./cartReducer/cartReducer";
@@ -12,12 +13,15 @@ import {
   orderCreateReducer,
   orderDetailsReducer,
   orderPayReducer,
+  orderListMyReducer
 } from "./orderReducer/orderReducer";
 import {
   userLoginReducer,
   userRegisterReducer,
   userDetailsReducer,
   userUpdateProfileReducer,
+  userListReducer,
+  userDeleteReducer
 } from "./userReducer/userReducer";
 
 const cartItemsFromStorage = localStorage.getItem("cartItems")
@@ -52,6 +56,10 @@ const rootReducer = combineReducers({
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
   orderPay: orderPayReducer,
+  orderListMy: orderListMyReducer,
+  userList: userListReducer,
+  userDelete: userDeleteReducer,
+  productDelete: productDeleteReducer,
 });
 const middleware = [thunk];
 const store = createStore(

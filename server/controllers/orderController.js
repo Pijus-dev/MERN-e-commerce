@@ -76,7 +76,6 @@ const updateOrderToPaid = expressAsyncHandler(async (req, res) => {
   }
 });
 
-
 // UPDATE ORDER to paid
 // PUT /api/orders/:orderID/stripe-payment
 // Private route
@@ -116,4 +115,14 @@ const stripePayment = expressAsyncHandler(async (req, res) => {
   });
 });
 
-export { addOrderItems, getOrderById, updateOrderToPaid, stripePayment };
+// GET logged in user orders
+// GET /api/orders/myorders
+// PRIVATE route
+
+const getPaidOrders = expressAsyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id });
+  res.json(orders);
+});
+
+
+export { addOrderItems, getOrderById, updateOrderToPaid, stripePayment, getPaidOrders };

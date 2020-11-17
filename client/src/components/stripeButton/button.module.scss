@@ -1,11 +1,11 @@
-$btn-color: #fa4616;
+$btn-color: #FFC439;
 $btn-hover: darken($btn-color, 8%);
 .btn {
   position: absolute;
   bottom: 50px;
   border: none;
   color: white;
-  padding: 10px 0;
+  padding: 15px 0;
   background: $btn-color;
   width: 80%;
   border-radius: 40px;

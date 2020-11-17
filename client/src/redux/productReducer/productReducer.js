@@ -1,6 +1,7 @@
 import {
   productActionTypes,
   productDetailsActionTypes,
+  productActionDeleteTypes
 } from "./productActionTypes";
 
 const productReducer = (state = { products: [] }, action) => {
@@ -31,4 +32,17 @@ const productDetailsReducer = (
       return state;
   }
 };
-export {  productReducer, productDetailsReducer };
+
+const productDeleteReducer = (state = {}, action) => {
+  switch (action.type) {
+    case productActionDeleteTypes.PRODUCT_DELETE_REQUEST:
+      return { loading: true};
+    case productActionDeleteTypes.PRODUCT_DELETE_SUCCESS:
+      return { loading: false, success: true};
+    case productActionDeleteTypes.PRODUCT_DELETE_FAILURE:
+      return { loading: false, error: action.payload };
+    default:
+      return state;
+  }
+};
+export {  productReducer, productDetailsReducer, productDeleteReducer };

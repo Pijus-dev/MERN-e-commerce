@@ -83,7 +83,7 @@ export const updateUserProfile = expressAsyncHandler(async (req, res) => {
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    
+
     if (req.body.password) {
       user.password = req.body.password;
     }
@@ -95,6 +95,30 @@ export const updateUserProfile = expressAsyncHandler(async (req, res) => {
       isAdmin: updatedUser.isAdmin,
       token: generateToken(updatedUser._id),
     });
+  } else {
+    res.status(401);
+    throw new Error("User not found");
+  }
+});
+
+// get all users admin only
+// GET to '/api/users
+// @ access Private/Admin
+export const getUsers = expressAsyncHandler(async (req, res) => {
+  const users = await User.find({});
+
+  res.json(users);
+});
+
+// delete user
+// GET to '/api/users/:id
+// @ access Private/Admin
+export const deleteUser = expressAsyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+
+  if (user) {
+    await user.remove();
+    res.json({ message: "User removed" });
   } else {
     res.status(401);
     throw new Error("User not found");

@@ -2,6 +2,7 @@ import {
   orderActionTypes,
   orderActionDetailsTypes,
   orderActionPayTypes,
+  orderActionMyOrderTypes,
 } from "./orderActionTypes";
 
 import axios from "axios";
@@ -126,12 +127,6 @@ export const stripePayOrder = (orderId, price, paymentResult) => async (
     } = getState();
     console.log(paymentResult);
 
-    // const config = {
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //     Authorization: `Bearer ${userInfo.token}`,
-    //   },
-    // };
     const { data } = await axios({
       method: "put",
       url: `/api/orders/${orderId}/stripe-payment`,
@@ -151,6 +146,39 @@ export const stripePayOrder = (orderId, price, paymentResult) => async (
   } catch (e) {
     dispatch({
       type: orderActionPayTypes.ORDER_PAY_FAIL,
+      payload:
+        e.response && e.response.data.message
+          ? e.response.data.message
+          : e.message,
+    });
+  }
+};
+
+export const listMyOrders = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: orderActionMyOrderTypes.ORDER_LIST_MY_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.get(`/api/orders/myorders`, config);
+
+    dispatch({
+      type: orderActionMyOrderTypes.ORDER_LIST_MY_SUCCESS,
+      payload: data,
+    });
+
+  } catch (e) {
+    dispatch({
+      type: orderActionMyOrderTypes.ORDER_LIST_MY_FAIL,
       payload:
         e.response && e.response.data.message
           ? e.response.data.message

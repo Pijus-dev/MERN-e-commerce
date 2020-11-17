@@ -164,7 +164,6 @@ const OrderPage = ({ match }) => {
               taxPrice={order.taxPrice}
               total={order.totalPrice}
               onSuccess={paymentType}
-              text="Pay Now"
               userInfo
             />
           </Row>
