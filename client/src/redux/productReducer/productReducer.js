@@ -1,7 +1,9 @@
 import {
   productActionTypes,
   productDetailsActionTypes,
-  productActionDeleteTypes
+  productActionDeleteTypes,
+  productActionCreateTypes,
+  productActionUpdateTypes,
 } from "./productActionTypes";
 
 const productReducer = (state = { products: [] }, action) => {
@@ -36,13 +38,49 @@ const productDetailsReducer = (
 const productDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case productActionDeleteTypes.PRODUCT_DELETE_REQUEST:
-      return { loading: true};
+      return { loading: true };
     case productActionDeleteTypes.PRODUCT_DELETE_SUCCESS:
-      return { loading: false, success: true};
+      return { loading: false, success: true };
     case productActionDeleteTypes.PRODUCT_DELETE_FAILURE:
       return { loading: false, error: action.payload };
     default:
       return state;
   }
 };
-export {  productReducer, productDetailsReducer, productDeleteReducer };
+
+const productCreateReducer = (state = {}, action) => {
+  switch (action.type) {
+    case productActionCreateTypes.PRODUCT_CREATE_REQUEST:
+      return { loading: true };
+    case productActionCreateTypes.PRODUCT_CREATE_SUCCESS:
+      return { loading: false, success: true, product: action.payload };
+    case productActionCreateTypes.PRODUCT_CREATE_FAILURE:
+      return { loading: false, error: action.payload };
+    case productActionCreateTypes.PRODUCT_CREATE_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
+const productUpdateReducer = (state = { product: {} }, action) => {
+  switch (action.type) {
+    case productActionUpdateTypes.PRODUCT_UPDATE_REQUEST:
+      return { loading: true };
+    case productActionUpdateTypes.PRODUCT_UPDATE_SUCCESS:
+      return { loading: false, success: true, product: action.payload };
+    case productActionUpdateTypes.PRODUCT_UPDATE_FAILURE:
+      return { loading: false, error: action.payload };
+    case productActionUpdateTypes.PRODUCT_UPDATE_RESET:
+      return { product: {} };
+    default:
+      return state;
+  }
+};
+export {
+  productReducer,
+  productDetailsReducer,
+  productDeleteReducer,
+  productCreateReducer,
+  productUpdateReducer,
+};

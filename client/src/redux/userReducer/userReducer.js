@@ -4,7 +4,7 @@ import {
   userActionDetailsTypes,
   userActionUpdateTypes,
   userActionListTypes,
-  userActionDeleteTypes
+  userActionDeleteTypes,
 } from "./userActionTypes";
 
 const userLoginReducer = (state = {}, action) => {

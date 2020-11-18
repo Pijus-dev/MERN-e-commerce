@@ -124,5 +124,38 @@ const getPaidOrders = expressAsyncHandler(async (req, res) => {
   res.json(orders);
 });
 
+// GET all orders
+// GET /api/orders/
+// PRIVATE route
 
-export { addOrderItems, getOrderById, updateOrderToPaid, stripePayment, getPaidOrders };
+const getAllOrders = expressAsyncHandler(async (req, res) => {
+  const orders = await Order.find({}).populate("user", "id name");
+  res.json(orders);
+});
+
+// UPDATE ORDER to deliver out
+// PUT /api/orders/:orderID/deliver
+// Private route
+const updateOrderToDelivered = expressAsyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+    const updatedOrder = await order.save();
+    res.json(order);
+  } else {
+    res.status(404);
+    throw new Error("Order not found");
+  }
+});
+
+export {
+  addOrderItems,
+  getOrderById,
+  updateOrderToPaid,
+  stripePayment,
+  getPaidOrders,
+  getAllOrders,
+  updateOrderToDelivered
+};

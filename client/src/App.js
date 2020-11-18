@@ -11,6 +11,8 @@ import PlaceOrder from "../src/pages/PlaceOrder/PlaceOrder";
 import OrderPage from "../src/pages/OrderPage/OrderPage";
 import UserListPage from "../src/pages/UserListPage/UserListPage";
 import ProductListPage from "../src/pages/ProductListPage/ProductListPage";
+import ProductEditPage from "../src/pages/ProductEditPage/ProductEditPage";
+import OrderListPage  from "../src/pages/OrderListPage/OrderListPage";
 
 import { Switch, Route } from "react-router-dom";
 
@@ -30,6 +32,8 @@ function App() {
           <Route path="/profile" component={ProfilePage} />
           <Route path="/admin/userlist" component={UserListPage} />
           <Route path="/admin/productlist" component={ProductListPage} />
+          <Route path="/admin/orderlist" component={OrderListPage} />
+          <Route path="/admin/product/:id/edit" component={ProductEditPage} />
         </Switch>
       </main>
     </>

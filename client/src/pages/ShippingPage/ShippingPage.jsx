@@ -6,8 +6,6 @@ import { Container, Form, Row, Col, Button } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { saveShippingAddress } from "../../redux/cartReducer/cartActions";
 
-import { motion, AnimatePresence } from "framer-motion";
-
 const ShippingPage = ({ history }) => {
   const cart = useSelector((state) => state.cart);
   const { shippingAddress } = cart;
@@ -23,7 +21,7 @@ const ShippingPage = ({ history }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    setShippingInfo({ ...shippingInfo, [name]: value.trim() });
+    setShippingInfo({ ...shippingInfo, [name]: value });
   };
 
   const dispatch = useDispatch();

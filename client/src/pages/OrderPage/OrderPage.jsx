@@ -7,17 +7,21 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   getOrderDetails,
   payOrder,
-  stripePayOrder
+  stripePayOrder,
+  deliverOrder,
 } from "../../redux/orderReducer/orderActions";
 
-import { orderActionPayTypes } from "../../redux/orderReducer/orderActionTypes";
+import {
+  orderActionPayTypes,
+  orderActionDeliverTypes,
+} from "../../redux/orderReducer/orderActionTypes";
 
 import { Container, Row, Col, ListGroup, Image, Alert } from "react-bootstrap";
 import Checkout from "../../components/checkout/Checkout";
 
 import { Link } from "react-router-dom";
 
-const OrderPage = ({ match }) => {
+const OrderPage = ({ match, history }) => {
   const orderId = match.params.id;
   const [sdkReady, setSdkReady] = useState(false);
 
@@ -29,6 +33,12 @@ const OrderPage = ({ match }) => {
 
   const orderPay = useSelector((state) => state.orderPay);
   const { success: successPay, loading: loadingPay } = orderPay;
+
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
+  const orderDeliver = useSelector((state) => state.orderDeliver);
+  const { success: successDeliver, loading: loadingDeliver } = orderDeliver;
 
   const addPayPalScript = async () => {
     const { data: clientId } = await axios.get("/api/config/paypal");
@@ -46,9 +56,16 @@ const OrderPage = ({ match }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!order || successPay) {
+    if (!userInfo) {
+      history.push("/");
+    }
+
+    if (!order || successPay || successDeliver) {
       dispatch({
         type: orderActionPayTypes.ORDER_PAY_RESET,
+      });
+      dispatch({
+        type: orderActionDeliverTypes.ORDER_DELIVER_RESET,
       });
       dispatch(getOrderDetails(orderId));
     } else if (!order.isPaid) {
@@ -58,10 +75,14 @@ const OrderPage = ({ match }) => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, successPay, orderId, order]);
+  }, [dispatch, successPay, orderId, order, successDeliver]);
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(orderId, paymentResult));
+  };
+
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order));
   };
 
   const paymentType = (paymentResult) => {
@@ -86,7 +107,7 @@ const OrderPage = ({ match }) => {
                 <ListGroup.Item>
                   <h2>Shipping:</h2>
                   <p>
-                    <strong>Name: </strong> {order.user.name}
+                    <strong>Name: </strong> {order && order.user.name}
                   </p>
                   <p>
                     <a href={`mailto:${order.user.email}`}>
@@ -164,7 +185,8 @@ const OrderPage = ({ match }) => {
               taxPrice={order.taxPrice}
               total={order.totalPrice}
               onSuccess={paymentType}
-              userInfo
+              userInfo={userInfo}
+              deliverHandler={deliverHandler}
             />
           </Row>
         </Container>

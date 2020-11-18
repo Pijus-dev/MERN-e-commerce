@@ -5,7 +5,9 @@ import { composeWithDevTools } from "redux-devtools-extension";
 import {
   productReducer,
   productDetailsReducer,
-  productDeleteReducer
+  productDeleteReducer,
+  productCreateReducer,
+  productUpdateReducer
 } from "./productReducer/productReducer";
 
 import cartReducer from "./cartReducer/cartReducer";
@@ -13,7 +15,9 @@ import {
   orderCreateReducer,
   orderDetailsReducer,
   orderPayReducer,
-  orderListMyReducer
+  orderListMyReducer,
+  ordersListReducer,
+  orderDeliverReducer
 } from "./orderReducer/orderReducer";
 import {
   userLoginReducer,
@@ -48,6 +52,9 @@ const initialState = {
 const rootReducer = combineReducers({
   productList: productReducer,
   productDetails: productDetailsReducer,
+  productDelete: productDeleteReducer,
+  productCreate: productCreateReducer,
+  productUpdate: productUpdateReducer,
   cart: cartReducer,
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
@@ -56,10 +63,11 @@ const rootReducer = combineReducers({
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
   orderPay: orderPayReducer,
+  orderDeliver: orderDeliverReducer,
   orderListMy: orderListMyReducer,
+  orderList: ordersListReducer,
   userList: userListReducer,
   userDelete: userDeleteReducer,
-  productDelete: productDeleteReducer,
 });
 const middleware = [thunk];
 const store = createStore(

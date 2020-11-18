@@ -2,6 +2,8 @@ import {
   productActionTypes,
   productDetailsActionTypes,
   productActionDeleteTypes,
+  productActionCreateTypes,
+  productActionUpdateTypes,
 } from "./productActionTypes";
 
 import axios from "axios";
@@ -91,6 +93,75 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
   } catch (e) {
     dispatch({
       type: productActionDeleteTypes.PRODUCT_DELETE_FAILURE,
+      payload:
+        e.response && e.response.data.message
+          ? e.response.data.message
+          : e.message,
+    });
+  }
+};
+
+export const createProduct = () => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: productActionCreateTypes.PRODUCT_CREATE_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.post(`/api/products`, {}, config);
+
+    dispatch({
+      type: productActionCreateTypes.PRODUCT_CREATE_SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    dispatch({
+      type: productActionCreateTypes.PRODUCT_CREATE_FAILURE,
+      payload:
+        e.response && e.response.data.message
+          ? e.response.data.message
+          : e.message,
+    });
+  }
+};
+
+export const updateProduct = (product) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: productActionUpdateTypes.PRODUCT_UPDATE_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    const { data } = await axios.put(
+      `/api/products/${product._id}`,
+      product,
+      config
+    );
+
+    dispatch({
+      type: productActionUpdateTypes.PRODUCT_UPDATE_SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    dispatch({
+      type: productActionUpdateTypes.PRODUCT_UPDATE_FAILURE,
       payload:
         e.response && e.response.data.message
           ? e.response.data.message

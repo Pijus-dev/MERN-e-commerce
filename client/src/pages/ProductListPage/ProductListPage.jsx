@@ -4,10 +4,12 @@ import { LinkContainer } from "react-router-bootstrap";
 import WithNavbar from "../../components/navbar/Navbar";
 import { Button, Modal, Row, Col, Table, Container } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+import { productActionCreateTypes } from "../../redux/productReducer/productActionTypes";
 
 import {
   listProducts,
   deleteProduct,
+  createProduct,
 } from "../../redux/productReducer/productActions";
 
 const ProductListPage = ({ history, match }) => {
@@ -18,6 +20,9 @@ const ProductListPage = ({ history, match }) => {
 
   const productDelete = useSelector((state) => state.productDelete);
   const { success: successMessage } = productDelete;
+
+  const productCreate = useSelector((state) => state.productCreate);
+  const { success: successCreate, product: createdProduct } = productCreate;
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -30,12 +35,28 @@ const ProductListPage = ({ history, match }) => {
   };
 
   useEffect(() => {
+    dispatch({ type: productActionCreateTypes.PRODUCT_CREATE_RESET });
     if (userInfo && userInfo.isAdmin) {
-      dispatch(listProducts());
+      if (successCreate) {
+        history.push(`/admin/product/${createdProduct._id}/edit`);
+      } else {
+        dispatch(listProducts());
+      }
     } else {
       history.push("/");
     }
-  }, [dispatch, userInfo, history, successMessage]);
+  }, [
+    dispatch,
+    userInfo,
+    history,
+    successMessage,
+    successCreate,
+    createdProduct,
+  ]);
+
+  const createProductHandler = () => {
+    dispatch(createProduct());
+  };
 
   return (
     <>
@@ -46,7 +67,7 @@ const ProductListPage = ({ history, match }) => {
             <h1>Products</h1>
           </Col>
           <Col className="text-right">
-            <Button className="my-3 rounded">
+            <Button className="my-3 rounded" onClick={createProductHandler}>
               <i className="fas fa-plus"></i> Create Product
             </Button>
           </Col>
@@ -74,7 +95,7 @@ const ProductListPage = ({ history, match }) => {
                   <td>{brand}</td>
                   <td>{sex}</td>
                   <td>
-                    <LinkContainer to={`admin/product/${_id}/edit`}>
+                    <LinkContainer to={`/admin/product/${_id}/edit`}>
                       <Button variant="light" className="btn-sm">
                         <i className="fas fa-edit"></i>
                       </Button>
