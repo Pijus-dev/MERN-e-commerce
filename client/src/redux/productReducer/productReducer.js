@@ -4,6 +4,7 @@ import {
   productActionDeleteTypes,
   productActionCreateTypes,
   productActionUpdateTypes,
+  productActionReviewTypes,
 } from "./productActionTypes";
 
 const productReducer = (state = { products: [] }, action) => {
@@ -77,10 +78,26 @@ const productUpdateReducer = (state = { product: {} }, action) => {
       return state;
   }
 };
+
+const productCreateReviewReducer = (state = {}, action) => {
+  switch (action.type) {
+    case productActionReviewTypes.PRODUCT_REVIEW_REQUEST:
+      return { loading: true };
+    case productActionReviewTypes.PRODUCT_REVIEW_SUCCESS:
+      return { loading: false, success: true };
+    case productActionReviewTypes.PRODUCT_REVIEW_FAILURE:
+      return { loading: false, error: action.payload };
+    case productActionReviewTypes.PRODUCT_REVIEW_RESET:
+      return { product: {} };
+    default:
+      return state;
+  }
+};
 export {
   productReducer,
   productDetailsReducer,
   productDeleteReducer,
   productCreateReducer,
   productUpdateReducer,
+  productCreateReviewReducer,
 };

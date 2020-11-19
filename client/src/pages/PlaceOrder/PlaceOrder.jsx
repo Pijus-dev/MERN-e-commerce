@@ -1,14 +1,27 @@
 import React, { useEffect } from "react";
 
-import { Container, Row, Col, ListGroup, Image, Alert } from "react-bootstrap";
+import {
+  Container,
+  Row,
+  Col,
+  ListGroup,
+  Image,
+  Alert,
+  Button,
+} from "react-bootstrap";
 
 import { Link } from "react-router-dom";
 
 import CheckoutSteps from "../../components/checkoutSteps/CheckoutSteps";
-import Checkout from "../../components/checkout/Checkout";
 import WithNavbar from "../../components/navbar/Navbar";
 import { useSelector, useDispatch } from "react-redux";
 import { createOrder } from "../../redux/orderReducer/orderActions";
+
+
+import Visa from "../../img/cards/visa.svg";
+import Master from "../../img/cards/master.svg";
+import Paypal from "../../img/cards/paypal.svg";
+
 const PlaceOrder = ({ history }) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
@@ -21,7 +34,8 @@ const PlaceOrder = ({ history }) => {
 
   const shippingPrice = itemsPrice > 100 ? 0 : 50;
   const taxPrice = Number((0.15 * itemsPrice).toFixed(2));
-  const totalPrice = Number(itemsPrice) + Number(shippingPrice) + Number(taxPrice);
+  const totalPrice =
+    Number(itemsPrice) + Number(shippingPrice) + Number(taxPrice);
 
   const orderCreate = useSelector((state) => state.orderCreate);
   const { order, success, error } = orderCreate;
@@ -108,16 +122,43 @@ const PlaceOrder = ({ history }) => {
               </ListGroup.Item>
             </ListGroup>
           </Col>
-          <Checkout
-            cartItems={cart.cartItems}
-            itemsPrice={itemsPrice}
-            shippingPrice={shippingPrice}
-            taxPrice={taxPrice}
-            total={totalPrice}
-            text="Proceed"
-            userInfo
-            checkoutHandler={placeOrderHandler}
-          />
+          <Col md={4} className="checkoutCard p-5" style={{ height: "50vh" }}>
+            <h2 className="text-white">Order Summary</h2>
+            <div className="orderInfo my-3">
+              <span className="text-white">
+                Subtotal (
+                {cart.cartItems.reduce((acc, item) => acc + item.qty, 0)})
+              </span>
+              <span className="text-white">
+                &euro;
+                {itemsPrice}
+              </span>
+            </div>
+            <div className="orderInfo my-3">
+              <span className="text-white">Shipping</span>
+              <span className="text-white">&euro;{shippingPrice}</span>
+            </div>
+            <div className="orderInfo my-3">
+              <span className="text-white">Tax Fee:</span>
+              <span className="text-white">&euro;{taxPrice}</span>
+            </div>
+            <div className="orderInfo my-3">
+              <span className="text-white">Total:</span>
+              <span className="text-white">&euro; {totalPrice.toFixed(2)}</span>
+            </div>
+            <Button
+              type="submit"
+              className="button"
+              onClick={placeOrderHandler}
+            >
+              Place Order
+            </Button>
+            <div className="paymentCard">
+              <img src={Visa} alt="visa" />
+              <img src={Master} alt="visa" />
+              <img src={Paypal} alt="visa" />
+            </div>
+          </Col>
         </Row>
       </Container>
     </>

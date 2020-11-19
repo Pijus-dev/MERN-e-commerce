@@ -13,6 +13,7 @@ import UserListPage from "../src/pages/UserListPage/UserListPage";
 import ProductListPage from "../src/pages/ProductListPage/ProductListPage";
 import ProductEditPage from "../src/pages/ProductEditPage/ProductEditPage";
 import OrderListPage  from "../src/pages/OrderListPage/OrderListPage";
+import FilteredProducts from "../src/pages/FilteredProducts/FilteredProducts";
 
 import { Switch, Route } from "react-router-dom";
 
@@ -22,6 +23,7 @@ function App() {
       <main>
         <Switch>
           <Route exact path="/" component={HomePage} />
+          <Route exact path="/search/:keyword" component={FilteredProducts} />
           <Route path="/product/:gender/:id" component={ProductPage} />
           <Route path="/cart/:id?" component={CartPage} />
           <Route path="/order/:id" component={OrderPage} />

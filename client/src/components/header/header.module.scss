@@ -27,29 +27,4 @@ header {
     width: 140px;
   }
 
-  .searchIcon {
-    margin-top: 4px;
-    position: relative;
-    input {
-      border: none;
-      background: transparent;
-      border-bottom: 1px solid #eee;
-      width: 100%;
-      outline: none;
-    }
-    .inputIcon {
-      position: absolute;
-      top: 0;
-      left: 0;
-
-      svg {
-        width: 20px;
-        height: 20px;
-      }
-    }
-    svg {
-      width: 30px;
-      height: 30px;
-    }
-  }
 }

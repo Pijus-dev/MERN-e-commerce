@@ -4,6 +4,7 @@ import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { useSelector, useDispatch } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { ReactComponent as Logo1 } from "../../img/logo2.svg";
+import SearchBox from "../searchBox/SearchBox";
 import Login from "../login/Login";
 import Register from "../register/Register";
 
@@ -39,6 +40,9 @@ const WithNavbar = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
+              <LinkContainer to>
+                <SearchBox />
+              </LinkContainer>
               <LinkContainer to="/cart">
                 <Nav.Link>
                   <i className="fas fa-shopping-cart"></i>Cart

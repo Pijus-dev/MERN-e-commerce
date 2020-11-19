@@ -76,7 +76,6 @@ const Checkout = ({
         <span className="text-white">Total:</span>
         <span className="text-white">&euro; {total}</span>
       </div>
-      {renderButtons()}
       <div className="paymentCard">
         <img src={Visa} alt="visa" />
         <img src={Master} alt="visa" />

@@ -81,7 +81,7 @@ const updateOrderToPaid = expressAsyncHandler(async (req, res) => {
 // Private route
 const stripePayment = expressAsyncHandler(async (req, res) => {
   const order = await Order.findById(req.params.id);
-  const stripe = new Stripe("sk_test_Uuy41OYoERxtEKNffc1IAwE200uEeLnURK");
+  const stripe = new Stripe(`${process.env.STRIPE_SECRET_KEY}`);
 
   const body = {
     source: req.body.token.id,
@@ -95,24 +95,17 @@ const stripePayment = expressAsyncHandler(async (req, res) => {
     },
   };
 
+  await stripe.charges.create(body, (stripeErr, stripeRes) => {
+    if (stripeErr) {
+      res.status(500).send({ error: stripeErr });
+    }
+  });
   if (order) {
     order.isPaid = true;
     order.paidAt = Date.now();
     const updatedOrder = await order.save();
     res.json(updatedOrder);
-  } else {
-    res.status(404);
-    throw new Error("Order not found");
   }
-
-  await stripe.charges.create(body, (stripeErr, stripeRes) => {
-    console.log(stripeErr, stripeRes);
-    if (stripeErr) {
-      res.status(500).send({ error: stripeErr });
-    } else {
-      res.status(200).send({ success: stripeRes });
-    }
-  });
 });
 
 // GET logged in user orders
@@ -157,5 +150,5 @@ export {
   stripePayment,
   getPaidOrders,
   getAllOrders,
-  updateOrderToDelivered
+  updateOrderToDelivered,
 };

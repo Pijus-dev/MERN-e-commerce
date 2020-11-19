@@ -1,0 +1,36 @@
+.backgroundImage {
+  height: 70vh;
+  background-position: center;
+  background-size: cover;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
+    url("../../img/snow.jpg");
+  width: 100vw;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 0;
+
+  .title {
+    text-align: center;
+    h1 {
+      line-height: 1.123;
+      font-size: 4rem;
+      letter-spacing: 1.5px;
+      color: #fff;
+      font-weight: bolder !important;
+    }
+    p {
+      color: #fff;
+      font-size: 1.55rem;
+      letter-spacing: 1.2px;
+    }
+  }
+  .buttons {
+    width: 55%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
+}

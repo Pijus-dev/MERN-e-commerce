@@ -5,7 +5,9 @@ import Login from "../login/Login";
 import Register from "../register/Register";
 import { useSelector, useDispatch } from "react-redux";
 import { logout } from "../../redux/userReducer/userActions";
-import { ReactComponent as SearchIcon } from "../../img/icon.svg";
+
+import SearchBox from "../searchBox/SearchBox";
+
 import { ReactComponent as Logo1 } from "../../img/logo2.svg";
 import { withRouter } from "react-router-dom";
 import styles from "./header.module.scss";
@@ -39,24 +41,7 @@ const Header = ({ history }) => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="ml-auto">
               <LinkContainer to>
-                {showInput ? (
-                  <div className={styles.searchIcon}>
-                    <input type="text" />
-                    <div
-                      className={styles.inputIcon}
-                      onClick={() => setShowInput(false)}
-                    >
-                      <SearchIcon />
-                    </div>
-                  </div>
-                ) : (
-                  <div
-                    className={styles.searchIcon}
-                    onClick={() => setShowInput(true)}
-                  >
-                    <SearchIcon />
-                  </div>
-                )}
+                <SearchBox />
               </LinkContainer>
               <LinkContainer to="/cart">
                 <Nav.Link style={{ color: "white" }}>

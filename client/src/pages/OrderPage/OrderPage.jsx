@@ -16,10 +16,23 @@ import {
   orderActionDeliverTypes,
 } from "../../redux/orderReducer/orderActionTypes";
 
-import { Container, Row, Col, ListGroup, Image, Alert } from "react-bootstrap";
-import Checkout from "../../components/checkout/Checkout";
+import {
+  Container,
+  Row,
+  Col,
+  ListGroup,
+  Image,
+  Alert,
+  Button,
+} from "react-bootstrap";
+import { PayPalButton } from "react-paypal-button-v2";
+import StripeButton from "../../components/stripeButton/StripeButton";
 
 import { Link } from "react-router-dom";
+
+import Visa from "../../img/cards/visa.svg";
+import Master from "../../img/cards/master.svg";
+import Paypal from "../../img/cards/paypal.svg";
 
 const OrderPage = ({ match, history }) => {
   const orderId = match.params.id;
@@ -75,22 +88,18 @@ const OrderPage = ({ match, history }) => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, successPay, orderId, order, successDeliver]);
+  }, [dispatch, successPay, orderId, order, successDeliver, history, userInfo]);
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(orderId, paymentResult));
   };
 
-  const deliverHandler = () => {
-    dispatch(deliverOrder(order));
+  const stripePaymentHandler = (paymentResult) => {
+    dispatch(stripePayOrder(orderId, order.totalPrice, paymentResult));
   };
 
-  const paymentType = (paymentResult) => {
-    if (paymentMethod === "PayPal") {
-      successPaymentHandler(paymentResult);
-    } else if (paymentMethod === "stripe") {
-      dispatch(stripePayOrder(orderId, order.totalPrice, paymentResult));
-    }
+  const deliverHandler = () => {
+    dispatch(deliverOrder(order));
   };
 
   return (
@@ -178,16 +187,57 @@ const OrderPage = ({ match, history }) => {
                 </ListGroup.Item>
               </ListGroup>
             </Col>
-            <Checkout
-              cartItems={order.orderItems}
-              itemsPrice={order.itemsPrice}
-              shippingPrice={order.shippingPrice}
-              taxPrice={order.taxPrice}
-              total={order.totalPrice}
-              onSuccess={paymentType}
-              userInfo={userInfo}
-              deliverHandler={deliverHandler}
-            />
+            <Col md={4} className="checkoutCard p-5" style={{ height: "50vh" }}>
+              <h2 className="text-white">Order Summary</h2>
+              <div className="orderInfo my-3">
+                <span className="text-white">
+                  Subtotal (
+                  {order.orderItems.reduce((acc, item) => acc + item.qty, 0)})
+                </span>
+                <span className="text-white">
+                  &euro;
+                  {order.itemsPrice}
+                </span>
+              </div>
+              <div className="orderInfo my-3">
+                <span className="text-white">Shipping</span>
+                <span className="text-white">&euro;{order.shippingPrice}</span>
+              </div>
+              <div className="orderInfo my-3">
+                <span className="text-white">Tax Fee:</span>
+                <span className="text-white">&euro;{order.taxPrice}</span>
+              </div>
+              <div className="orderInfo my-3">
+                <span className="text-white">Total:</span>
+                <span className="text-white">
+                  &euro; {order.totalPrice.toFixed(2)}
+                </span>
+              </div>
+              {paymentMethod === "PayPal" ? (
+                <PayPalButton
+                  amount={order.totalPrice.toFixed(2)}
+                  onSuccess={successPaymentHandler}
+                />
+              ) : paymentMethod === "stripe" ? (
+                <StripeButton
+                  price={order.totalPrice.toFixed(2)}
+                  onToken={stripePaymentHandler}
+                />
+              ) : userInfo.isAdmin && order.isPaid && !order.isDelivered ? (
+                <Button
+                  type="submit"
+                  variant="success"
+                  onClick={deliverHandler}
+                >
+                  Mark As Deliver
+                </Button>
+              ) : null}
+              <div className="paymentCard">
+                <img src={Visa} alt="visa" />
+                <img src={Master} alt="visa" />
+                <img src={Paypal} alt="visa" />
+              </div>
+            </Col>
           </Row>
         </Container>
       )}

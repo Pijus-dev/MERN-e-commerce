@@ -1,4 +1,32 @@
-
 .rating span {
   margin-left: 0.1rem;
+}
+
+.checkoutCard {
+  background: black !important;
+  border-radius: 10px;
+  position: relative;
+}
+
+.orderInfo {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.button {
+  position: absolute;
+  bottom: 50px;
+  background: #fa4616;
+  width: 80%;
+  border-radius: 40px;
+  letter-spacing: 0.2rem;
+  font-size: 0.8rem;
+}
+
+@media screen and (max-width: 552px) {
+  .checkoutCard {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+  }
 }

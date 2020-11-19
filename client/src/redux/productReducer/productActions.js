@@ -4,6 +4,7 @@ import {
   productActionDeleteTypes,
   productActionCreateTypes,
   productActionUpdateTypes,
+  productActionReviewTypes,
 } from "./productActionTypes";
 
 import axios from "axios";
@@ -29,12 +30,12 @@ const listProductsBySex = (sex) => async (dispatch) => {
   }
 };
 
-const listProducts = () => async (dispatch) => {
+const listProducts = (keyword = "") => async (dispatch) => {
   try {
     dispatch({
       type: productActionTypes.PRODUCT_LIST_REQUEST,
     });
-    const { data } = await axios.get(`/api/products`);
+    const { data } = await axios.get(`/api/products?keyword=${keyword}`);
     dispatch({
       type: productActionTypes.PRODUCT_LIST_SUCCESS,
       payload: data,
@@ -162,6 +163,41 @@ export const updateProduct = (product) => async (dispatch, getState) => {
   } catch (e) {
     dispatch({
       type: productActionUpdateTypes.PRODUCT_UPDATE_FAILURE,
+      payload:
+        e.response && e.response.data.message
+          ? e.response.data.message
+          : e.message,
+    });
+  }
+};
+
+export const createProductReview = (productID, review) => async (
+  dispatch,
+  getState
+) => {
+  try {
+    dispatch({
+      type: productActionReviewTypes.PRODUCT_REVIEW_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+
+    await axios.post(`/api/products/${productID}/reviews`, review, config);
+
+    dispatch({
+      type: productActionReviewTypes.PRODUCT_REVIEW_SUCCESS,
+    });
+  } catch (e) {
+    dispatch({
+      type: productActionReviewTypes.PRODUCT_REVIEW_FAILURE,
       payload:
         e.response && e.response.data.message
           ? e.response.data.message

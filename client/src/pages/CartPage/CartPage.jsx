@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 import WithNavbar from "../../components/navbar/Navbar";
 import Login from "../../components/login/Login";
 import Register from "../../components/register/Register";
-import Checkout from "../../components/checkout/Checkout";
+
+import Visa from "../../img/cards/visa.svg";
+import Master from "../../img/cards/master.svg";
+import Paypal from "../../img/cards/paypal.svg";
 
 import "./cartpage.scss";
 
@@ -78,7 +81,7 @@ const CartPage = ({ match, location, history }) => {
             ) : (
               <ListGroup variant="flush" className="p-0">
                 {cartItems.map((item) => (
-                  <ListGroup.Item key={item.product}>
+                  <ListGroup.Item key={item.product} className="cartItems">
                     <Row>
                       <Link></Link>
                       <Col md={4}>
@@ -128,17 +131,38 @@ const CartPage = ({ match, location, history }) => {
               </ListGroup>
             )}
           </Col>
-          <Checkout
-            cartItems={cartItems}
-            itemsPrice={itemsPrice}
-            shippingPrice={shippingPrice}
-            taxPrice={taxPrice}
-            total={total}
-            userInfo={userInfo}
-            setShowModal={setShowModal}
-            checkoutHandler={checkoutHandler}
-            text="Checkout"
-          />
+          <Col md={4} className="checkoutCard p-5" style={{ height: "50vh" }}>
+            <h2 className="text-white">Order Summary</h2>
+            <div className="orderInfo my-3">
+              <span className="text-white">
+                Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
+              </span>
+              <span className="text-white">
+                &euro;
+                {itemsPrice}
+              </span>
+            </div>
+            <div className="orderInfo my-3">
+              <span className="text-white">Shipping</span>
+              <span className="text-white">&euro;{shippingPrice}</span>
+            </div>
+            <div className="orderInfo my-3">
+              <span className="text-white">Tax Fee:</span>
+              <span className="text-white">&euro;{taxPrice}</span>
+            </div>
+            <div className="orderInfo my-3">
+              <span className="text-white">Total:</span>
+              <span className="text-white">&euro; {total.toFixed(2)}</span>
+            </div>
+            <Button type="submit" className="button" onClick={checkoutHandler}>
+              Checkout
+            </Button>
+            <div className="paymentCard">
+              <img src={Visa} alt="visa" />
+              <img src={Master} alt="visa" />
+              <img src={Paypal} alt="visa" />
+            </div>
+          </Col>
         </Row>
         {showRegister ? (
           <Register
