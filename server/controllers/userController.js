@@ -1,5 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
+import Order from "../models/orderModel.js";
+import nodemailer from "nodemailer";
 import { generateToken } from "../utils/generateToken.js";
 
 // auth user & get a token
@@ -138,7 +140,6 @@ export const getUserById = expressAsyncHandler(async (req, res) => {
   }
 });
 
-
 // update user's profile admin only
 // PUT to '/api/users/:id
 // @ access Private/Admin
@@ -155,10 +156,52 @@ export const updateUser = expressAsyncHandler(async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
-      isAdmin: updatedUser.isAdmin
+      isAdmin: updatedUser.isAdmin,
     });
   } else {
     res.status(401);
     throw new Error("User not found");
   }
+});
+
+// send order details to user
+// POST  to '/api/users/order/orderID
+// @ access Private route
+export const sendEmailToUser = expressAsyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id).populate(
+    "user",
+    "id name email"
+  );
+  let mailTransporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: process.env.GOOGLE_NAME,
+      pass: process.env.GOOGLE_PASS,
+    },
+  });
+  let mailDetails = {
+    from: "pijonass@gmail.com",
+    to: `${order.user.email}`,
+    subject: "MERN shop payment order",
+    html: `
+      <h3>Dear, ${order.user.name}</h3>
+      <p>This is a summary of your order: </p>
+      <ul>
+        <li>Total Price: $${order.totalPrice}</li>
+        <li>Shipping Price: $${order.shippingPrice}</li>
+        <li>Tax Price: $${order.taxPrice}</li>
+        <li>Items Price: $${order.itemsPrice}</li>
+      </ul>
+      <p>Best wishes,<br/>
+         MERN shop
+      </p>
+      `,
+  };
+  mailTransporter.sendMail(mailDetails, function (err, data) {
+    if (err) {
+      console.log(`${err}`);
+    } else {
+      res.json({ message: "Email was sent successfully " });
+    }
+  });
 });

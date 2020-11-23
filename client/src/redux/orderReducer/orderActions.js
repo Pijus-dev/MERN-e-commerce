@@ -161,7 +161,6 @@ export const stripePayOrder = (orderId, price, paymentResult) => async (
     const {
       userLogin: { userInfo },
     } = getState();
-    console.log(paymentResult);
 
     const { data } = await axios({
       method: "put",

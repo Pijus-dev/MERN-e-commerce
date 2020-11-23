@@ -8,6 +8,7 @@ import {
   deleteUser,
   getUserById,
   updateUser,
+  sendEmailToUser,
 } from "../controllers/userController.js";
 import { protect, isAdmin } from "../middlewares/authMiddleware.js";
 
@@ -28,4 +29,5 @@ router
   .get(protect, isAdmin, getUserById)
   .put(protect, isAdmin, updateUser);
 
+router.route("/order/:id").post(sendEmailToUser);
 export default router;

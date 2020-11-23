@@ -93,11 +93,24 @@ const OrderPage = ({ match, history }) => {
     }
   }, [userInfo, history]);
 
+  // const sendEmail = async () => {
+  //   const config = {
+  //     headers: {
+  //       Authorization: `Bearer ${userInfo.token}`,
+  //     },
+  //   };
+  //   await axios.post(`/api/users/order/${orderId}`, config);
+  // };
+
   useEffect(() => {
     if (successPay) {
       dispatch({ type: cartActionTypes.RESET_PAYMENT_METHOD });
+      const sendEmail = async () => {
+        await axios.post(`/api/users/order/${orderId}`);
+      };
+      sendEmail();
     }
-  }, [successPay, dispatch]);
+  }, [successPay, dispatch, orderId, userInfo]);
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(orderId, paymentResult));
