@@ -13,7 +13,8 @@ export const getProducts = expressAsyncHandler(async (req, res) => {
         },
       }
     : {};
-  const products = await Product.find({...keyword});
+
+  const products = await Product.find({ ...keyword });
 
   res.json(products);
 });
@@ -37,10 +38,25 @@ export const getProductById = expressAsyncHandler(async (req, res) => {
 // @ access Public route
 export const getProductsByGender = expressAsyncHandler(async (req, res) => {
   const products = await Product.aggregate([
-    { $match: { sex: `${req.params.sex}` } },
+    {
+      $match: { sex: `${req.params.sex}` },
+    },
   ]);
   res.json(products);
 });
+
+// fetch all products based on gender and category from mongoDB
+// GET to '/api/products
+// @ access Public route
+export const getProductsByGenderAndCategory = expressAsyncHandler(
+  async (req, res) => {
+    const products = await Product.find({
+      sex: req.params.sex,
+      category: req.params.category,
+    });
+    res.json(products);
+  }
+);
 
 // delete product
 // GET to '/api/products/:id

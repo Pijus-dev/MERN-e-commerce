@@ -12,24 +12,28 @@ const HomePage = ({ history }) => {
   return (
     <>
       <Header />
-      <div className={styles.video}>
-        <video
-          muted
-          autoPlay
-          style={{
-            position: "absolute",
-            top: 0,
-            minHeight: "100vh",
-            zIndex: "-1",
-          }}
-          loop
-          src={Video}
-          type="video/mp4"
-        />
-
+      <video
+        id={styles.video}
+        muted
+        autoPlay
+        style={{
+          position: "absolute",
+          top: 0,
+          minHeight: "100vh",
+          zIndex: "-1",
+        }}
+        loop
+        src={Video}
+        type="video/mp4"
+      />
+      <div className={styles.videoWrapper}>
         <div className={styles.title}>
           <Row>
-            <Col xs={12} md={8}>
+            <Col
+              xs={12}
+              md={8}
+              className="d-flex justify-content-center align-items-center flex-column"
+            >
               <h1>Refining the Uphill Game</h1>
               <p>
                 As fit as a trail runner. As efficient as a climber. And as
@@ -39,12 +43,12 @@ const HomePage = ({ history }) => {
               </p>
               <div className={styles.buttons}>
                 <CustomButton
-                  onClick={() => history.push("/products/gender/male")}
+                  onClick={() => history.push("/products/male")}
                 >
                   Shop Men's
                 </CustomButton>
                 <CustomButton
-                  onClick={() => history.push("/products/gender/female")}
+                  onClick={() => history.push("/products/female")}
                 >
                   Shop Women's
                 </CustomButton>

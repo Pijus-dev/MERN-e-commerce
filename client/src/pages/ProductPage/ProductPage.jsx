@@ -69,7 +69,7 @@ const ProductPage = ({ match, history }) => {
       <Container className="pb-3">
         <Link
           className="btn btn-outline-secondary my-3  rounded"
-          to={`/products/gender/${match.params.gender}`}
+          to={`/products/${match.params.gender}`}
         >
           Go back
         </Link>

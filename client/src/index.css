@@ -1,3 +1,6 @@
+main {
+  overflow: hidden;
+}
 .rating span {
   margin-left: 0.1rem;
 }

@@ -43,6 +43,9 @@ const WithNavbar = () => {
               <LinkContainer to>
                 <SearchBox />
               </LinkContainer>
+              <LinkContainer to="/shop">
+                <Nav.Link>Shop</Nav.Link>
+              </LinkContainer>
               <LinkContainer to="/cart">
                 <Nav.Link>
                   <i className="fas fa-shopping-cart"></i>Cart
@@ -82,20 +85,20 @@ const WithNavbar = () => {
               )}
             </Nav>
           </Navbar.Collapse>
-          {showRegister ? (
-            <Register
-              showRegister={showRegister}
-              setShowRegister={setShowRegister}
-            />
-          ) : (
-            <Login
-              showModal={showModal}
-              setShowModal={setShowModal}
-              handleChange={toggleModal}
-            />
-          )}
         </Container>
       </Navbar>
+      {showRegister ? (
+        <Register
+          showRegister={showRegister}
+          setShowRegister={setShowRegister}
+        />
+      ) : (
+        <Login
+          showModal={showModal}
+          setShowModal={setShowModal}
+          handleChange={toggleModal}
+        />
+      )}
     </>
   );
 };

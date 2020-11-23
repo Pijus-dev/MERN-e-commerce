@@ -5,6 +5,7 @@ import {
   userActionUpdateTypes,
   userActionListTypes,
   userActionDeleteTypes,
+  userActionEditTypes,
 } from "./userActionTypes";
 import { orderActionMyOrderTypes } from "../orderReducer/orderActionTypes";
 import axios from "axios";
@@ -219,6 +220,41 @@ export const deleteUser = (id) => async (dispatch, getState) => {
   } catch (e) {
     dispatch({
       type: userActionDeleteTypes.USER_DELETE_FAIL,
+      payload:
+        e.response && e.response.data.message
+          ? e.response.data.message
+          : e.message,
+    });
+  }
+};
+
+export const editUser = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: userActionEditTypes.USER_EDIT_REQUEST,
+    });
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(`/api/users/${user._id}`, user, config);
+
+    dispatch({
+      type: userActionEditTypes.USER_EDIT_SUCCESS,
+    });
+    dispatch({
+      type: userActionDetailsTypes.USER_DETAILS_SUCCESS,
+      payload: data,
+    });
+  } catch (e) {
+    dispatch({
+      type: userActionEditTypes.USER_EDIT_FAIL,
       payload:
         e.response && e.response.data.message
           ? e.response.data.message

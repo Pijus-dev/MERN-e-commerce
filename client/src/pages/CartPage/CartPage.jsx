@@ -75,8 +75,8 @@ const CartPage = ({ match, location, history }) => {
           <Col md={8}>
             <h1>Shopping Cart</h1>
             {cartItems.length === 0 ? (
-              <Alert variant="info">
-                Your cart is empty <Link to="/">Go Back</Link>
+              <Alert variant="info" className="rounded">
+                Your cart is empty <Link to="/shop">Go Back</Link>
               </Alert>
             ) : (
               <ListGroup variant="flush" className="p-0">
@@ -154,9 +154,23 @@ const CartPage = ({ match, location, history }) => {
               <span className="text-white">Total:</span>
               <span className="text-white">&euro; {total.toFixed(2)}</span>
             </div>
-            <Button type="submit" className="button" onClick={checkoutHandler}>
-              Checkout
-            </Button>
+            {userInfo ? (
+              <Button
+                type="submit"
+                className="button"
+                onClick={checkoutHandler}
+              >
+                Checkout
+              </Button>
+            ) : (
+              <Button
+                type="submit"
+                className="button"
+                onClick={() => setShowModal(true)}
+              >
+                Sign In
+              </Button>
+            )}
             <div className="paymentCard">
               <img src={Visa} alt="visa" />
               <img src={Master} alt="visa" />

@@ -1,0 +1,27 @@
+.backgroundImage {
+  height: 75vh;
+  background-position: 50% 10%;
+  background-size: cover;
+  width: 100vw;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  z-index: 0;
+
+  .title {
+    h1 {
+      line-height: 1.123;
+      font-size: 5rem;
+      letter-spacing: 1.5px;
+      color: white;
+      font-weight: bolder !important;
+      text-transform: capitalize;
+
+      @media screen and (max-width: 450px) {
+        font-size: 2.8rem;
+      }
+    }
+  }
+}

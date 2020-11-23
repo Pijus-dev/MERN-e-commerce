@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Navbar, Nav, Container } from "react-bootstrap";
+import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import Login from "../login/Login";
 import Register from "../register/Register";
@@ -10,10 +10,9 @@ import SearchBox from "../searchBox/SearchBox";
 
 import { ReactComponent as Logo1 } from "../../img/logo2.svg";
 import { withRouter } from "react-router-dom";
-import styles from "./header.module.scss";
+import  "./header.scss";
 
 const Header = ({ history }) => {
-  const [showInput, setShowInput] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
 
@@ -43,6 +42,9 @@ const Header = ({ history }) => {
               <LinkContainer to>
                 <SearchBox />
               </LinkContainer>
+              <LinkContainer to="/shop">
+                <Nav.Link>Shop</Nav.Link>
+              </LinkContainer>
               <LinkContainer to="/cart">
                 <Nav.Link style={{ color: "white" }}>
                   <i className="fas fa-shopping-cart"></i>Cart
@@ -69,22 +71,35 @@ const Header = ({ history }) => {
                   <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>
                 </LinkContainer>
               )}
+              {userInfo && userInfo.isAdmin && (
+                <NavDropdown className="rounded" title="Admin" id="adminMenu">
+                  <LinkContainer to="/admin/userlist">
+                    <NavDropdown.Item>Users</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/productlist">
+                    <NavDropdown.Item>Products</NavDropdown.Item>
+                  </LinkContainer>
+                  <LinkContainer to="/admin/orderlist">
+                    <NavDropdown.Item>Orders</NavDropdown.Item>
+                  </LinkContainer>
+                </NavDropdown>
+              )}
             </Nav>
           </Navbar.Collapse>
-          {showRegister ? (
-            <Register
-              showRegister={showRegister}
-              setShowRegister={setShowRegister}
-            />
-          ) : (
-            <Login
-              showModal={showModal}
-              setShowModal={setShowModal}
-              handleChange={toggleModal}
-            />
-          )}
         </Container>
       </Navbar>
+      {showRegister ? (
+        <Register
+          showRegister={showRegister}
+          setShowRegister={setShowRegister}
+        />
+      ) : (
+        <Login
+          showModal={showModal}
+          setShowModal={setShowModal}
+          handleChange={toggleModal}
+        />
+      )}
     </header>
   );
 };

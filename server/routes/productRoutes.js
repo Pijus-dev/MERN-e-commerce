@@ -7,6 +7,7 @@ import {
   updateProduct,
   createProduct,
   createProductReview,
+  getProductsByGenderAndCategory
 } from "../controllers/productController.js";
 
 import { protect, isAdmin } from "../middlewares/authMiddleware.js";
@@ -22,5 +23,6 @@ router
   .put(protect, isAdmin, updateProduct);
 
 router.route("/gender/:sex").get(getProductsByGender);
+router.route("/:sex/:category").get(getProductsByGenderAndCategory);
 
 export default router;

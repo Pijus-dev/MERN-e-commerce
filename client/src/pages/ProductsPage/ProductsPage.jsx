@@ -23,6 +23,7 @@ const ProductsPage = ({ match }) => {
   const dispatch = useDispatch();
   const productList = useSelector((state) => state.productList);
   const { products } = productList;
+  
   const settings = {
     dots: false,
     infinite: false,
@@ -70,7 +71,7 @@ const ProductsPage = ({ match }) => {
       setJackets(filteredJackets);
 
       const filteredHoodies = products.filter(
-        (item) => item.category === "hoody"
+        (item) => item.category === "hoodies"
       );
       setHoodies(filteredHoodies);
     }

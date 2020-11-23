@@ -12,8 +12,10 @@ import OrderPage from "../src/pages/OrderPage/OrderPage";
 import UserListPage from "../src/pages/UserListPage/UserListPage";
 import ProductListPage from "../src/pages/ProductListPage/ProductListPage";
 import ProductEditPage from "../src/pages/ProductEditPage/ProductEditPage";
-import OrderListPage  from "../src/pages/OrderListPage/OrderListPage";
+import OrderListPage from "../src/pages/OrderListPage/OrderListPage";
 import FilteredProducts from "../src/pages/FilteredProducts/FilteredProducts";
+import CategoryPage from "../src/pages/CategoryPage/CategoryPage";
+import UserEditPage from "../src/pages/UserEditPage/UserEditPage";
 
 import { Switch, Route } from "react-router-dom";
 
@@ -23,19 +25,22 @@ function App() {
       <main>
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route exact path="/search/:keyword" component={FilteredProducts} />
+          <Route path="/shop/search/:keyword" component={FilteredProducts} />
+          <Route exact path="/shop" component={FilteredProducts} />
+          <Route exact path="/shop/:sex/:category" component={CategoryPage} />
           <Route path="/product/:gender/:id" component={ProductPage} />
           <Route path="/cart/:id?" component={CartPage} />
           <Route path="/order/:id" component={OrderPage} />
           <Route path="/shipping" component={ShippingPage} />
           <Route path="/payment" component={PaymentPage} />
           <Route path="/placeorder" component={PlaceOrder} />
-          <Route path="/products/gender/:sex" component={ProductsPage} />
+          <Route exact path="/products/:sex" component={ProductsPage} />
           <Route path="/profile" component={ProfilePage} />
           <Route path="/admin/userlist" component={UserListPage} />
           <Route path="/admin/productlist" component={ProductListPage} />
           <Route path="/admin/orderlist" component={OrderListPage} />
           <Route path="/admin/product/:id/edit" component={ProductEditPage} />
+          <Route path="/admin/user/:id/edit" component={UserEditPage} />
         </Switch>
       </main>
     </>

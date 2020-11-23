@@ -15,6 +15,7 @@ import {
   orderActionPayTypes,
   orderActionDeliverTypes,
 } from "../../redux/orderReducer/orderActionTypes";
+import { cartActionTypes } from "../../redux/cartReducer/cartActionTypes";
 
 import {
   Container,
@@ -69,10 +70,6 @@ const OrderPage = ({ match, history }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (!userInfo) {
-      history.push("/");
-    }
-
     if (!order || successPay || successDeliver) {
       dispatch({
         type: orderActionPayTypes.ORDER_PAY_RESET,
@@ -88,7 +85,19 @@ const OrderPage = ({ match, history }) => {
         setSdkReady(true);
       }
     }
-  }, [dispatch, successPay, orderId, order, successDeliver, history, userInfo]);
+  }, [dispatch, successPay, orderId, order, successDeliver, history]);
+
+  useEffect(() => {
+    if (!userInfo) {
+      history.push("/");
+    }
+  }, [userInfo, history]);
+
+  useEffect(() => {
+    if (successPay) {
+      dispatch({ type: cartActionTypes.RESET_PAYMENT_METHOD });
+    }
+  }, [successPay, dispatch]);
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(orderId, paymentResult));
@@ -223,7 +232,10 @@ const OrderPage = ({ match, history }) => {
                   price={order.totalPrice.toFixed(2)}
                   onToken={stripePaymentHandler}
                 />
-              ) : userInfo.isAdmin && order.isPaid && !order.isDelivered ? (
+              ) : userInfo &&
+                userInfo.isAdmin &&
+                order.isPaid &&
+                !order.isDelivered ? (
                 <Button
                   type="submit"
                   variant="success"

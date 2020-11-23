@@ -21,7 +21,7 @@ import { userActionUpdateTypes } from "../../redux/userReducer/userActionTypes";
 
 import WithNavbar from "../../components/navbar/Navbar";
 
-const ProfilePage = () => {
+const ProfilePage = ({ history }) => {
   const [userInput, setUserInput] = useState({
     name: "",
     email: "",
@@ -66,6 +66,12 @@ const ProfilePage = () => {
       setMessage("You have successfully updated your profile");
     }
   };
+  useEffect(() => {
+    if (!userInfo) {
+      history.push("/");
+    }
+  }, [userInfo, history]);
+
   useEffect(() => {
     if (!user || !user.name) {
       dispatch({ type: userActionUpdateTypes.USER_UPDATE_RESET });

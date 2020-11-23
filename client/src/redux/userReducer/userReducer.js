@@ -5,6 +5,7 @@ import {
   userActionUpdateTypes,
   userActionListTypes,
   userActionDeleteTypes,
+  userActionEditTypes,
 } from "./userActionTypes";
 
 const userLoginReducer = (state = {}, action) => {
@@ -125,7 +126,7 @@ const userListReducer = (state = { users: [] }, action) => {
   }
 };
 
-const userDeleteReducer = (state = { }, action) => {
+const userDeleteReducer = (state = {}, action) => {
   switch (action.type) {
     case userActionDeleteTypes.USER_DELETE_REQUEST:
       return {
@@ -146,11 +147,35 @@ const userDeleteReducer = (state = { }, action) => {
   }
 };
 
+const userEditReducer = (state = { user: {} }, action) => {
+  switch (action.type) {
+    case userActionEditTypes.USER_EDIT_REQUEST:
+      return {
+        loading: true,
+      };
+    case userActionEditTypes.USER_EDIT_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+      };
+    case userActionEditTypes.USER_EDIT_FAIL:
+      return {
+        loading: false,
+        error: action.payload,
+      };
+    case userActionEditTypes.USER_EDIT_RESET:
+      return {};
+    default:
+      return state;
+  }
+};
+
 export {
   userLoginReducer,
   userRegisterReducer,
   userDetailsReducer,
   userUpdateProfileReducer,
   userListReducer,
-  userDeleteReducer
+  userDeleteReducer,
+  userEditReducer,
 };

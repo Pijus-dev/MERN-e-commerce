@@ -42,6 +42,10 @@ const cartReducer = (
         ...state,
         paymentMethod: action.payload,
       };
+    case cartActionTypes.RESET_PAYMENT_METHOD:
+      return {
+        paymentMethod: "",
+      };
     default:
       return state;
   }
