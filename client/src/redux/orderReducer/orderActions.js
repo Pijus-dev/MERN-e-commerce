@@ -167,7 +167,7 @@ export const stripePayOrder = (orderId, price, paymentResult) => async (
       url: `/api/orders/${orderId}/stripe-payment`,
       data: {
         token: paymentResult,
-        amount: Math.round(price * 100),
+        amount: Math.round(price * 100, 2),
       },
       headers: {
         "Content-Type": "application/json",

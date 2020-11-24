@@ -2,6 +2,8 @@ import expressAsyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import Order from "../models/orderModel.js";
 import nodemailer from "nodemailer";
+import path from "path";
+import ejs from "ejs";
 import { generateToken } from "../utils/generateToken.js";
 
 // auth user & get a token
@@ -179,24 +181,18 @@ export const sendEmailToUser = expressAsyncHandler(async (req, res) => {
       pass: process.env.GOOGLE_PASS,
     },
   });
+
+  const data = await ejs.renderFile(process.cwd() + "/server/template/emailTemplate.ejs", {
+    order: order,
+  });
+
   let mailDetails = {
     from: "pijonass@gmail.com",
     to: `${order.user.email}`,
     subject: "MERN shop payment order",
-    html: `
-      <h3>Dear, ${order.user.name}</h3>
-      <p>This is a summary of your order: </p>
-      <ul>
-        <li>Total Price: $${order.totalPrice}</li>
-        <li>Shipping Price: $${order.shippingPrice}</li>
-        <li>Tax Price: $${order.taxPrice}</li>
-        <li>Items Price: $${order.itemsPrice}</li>
-      </ul>
-      <p>Best wishes,<br/>
-         MERN shop
-      </p>
-      `,
+    html: data,
   };
+
   mailTransporter.sendMail(mailDetails, function (err, data) {
     if (err) {
       console.log(`${err}`);
