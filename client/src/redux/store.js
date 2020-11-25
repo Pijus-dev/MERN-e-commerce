@@ -27,8 +27,10 @@ import {
   userUpdateProfileReducer,
   userListReducer,
   userDeleteReducer,
-  userEditReducer
+  userEditReducer,
 } from "./userReducer/userReducer";
+
+import { chatReducer } from "./chatReducer/chatReducer";
 
 const cartItemsFromStorage = localStorage.getItem("cartItems")
   ? JSON.parse(localStorage.getItem("cartItems"))
@@ -72,6 +74,7 @@ const rootReducer = combineReducers({
   orderList: ordersListReducer,
   userList: userListReducer,
   userDelete: userDeleteReducer,
+  chat: chatReducer,
 });
 const middleware = [thunk];
 const store = createStore(

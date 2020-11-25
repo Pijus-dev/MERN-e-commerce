@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import HomePage from "../src/pages/HomePage/HomePage";
 import ProductPage from "../src/pages/ProductPage/ProductPage";
@@ -17,9 +17,13 @@ import FilteredProducts from "../src/pages/FilteredProducts/FilteredProducts";
 import CategoryPage from "../src/pages/CategoryPage/CategoryPage";
 import UserEditPage from "../src/pages/UserEditPage/UserEditPage";
 
+import Chat from "../src/components/chat/Chat";
+
 import { Switch, Route } from "react-router-dom";
 
 function App() {
+
+
   return (
     <>
       <main>
@@ -42,6 +46,7 @@ function App() {
           <Route path="/admin/product/:id/edit" component={ProductEditPage} />
           <Route path="/admin/user/:id/edit" component={UserEditPage} />
         </Switch>
+        <Chat />
       </main>
     </>
   );
