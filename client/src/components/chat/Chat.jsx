@@ -20,10 +20,11 @@ const Chat = () => {
   const dispatch = useDispatch();
 
   const scrollToBottom = () => {
-    if (messages && messages.message) {
+    if (messages && messages.length > 0) {
       endOfMessages.current.scrollIntoView({ behavior: "smooth" });
     }
   };
+  useEffect(scrollToBottom, [messages]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,22 +46,24 @@ const Chat = () => {
       dispatch(createSession());
     }
   }, []);
-  useEffect(scrollToBottom, [messages]);
   return (
-    <div className="chatBotContainer">
+    <div className="wrapper">
       <i
         className="fas fa-comment-alt fa-2x"
         onClick={() => setShowChat(!showChat)}
       ></i>
       {showChat && (
-        <div className="chatBot">
-          {messages.length > 0 &&
-            messages.map(({ message, type }, idx) => (
-              <div key={idx} className={`${type}`}>
-                {message}
-              </div>
-            ))}
-          <div ref={endOfMessages}></div>
+        <div className="chatBotContainer">
+          <div className="chatBot">
+            {messages.length > 0 &&
+              messages.map(({ message, type }, idx) => (
+                <div key={idx} className={`${type}`}>
+                  {message}
+                </div>
+              ))}
+            <div ref={endOfMessages}></div>
+          </div>
+
           <form onSubmit={handleSubmit}>
             <div className="formInput">
               <input

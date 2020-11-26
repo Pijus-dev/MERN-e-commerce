@@ -1,4 +1,4 @@
-.chatBotContainer {
+.wrapper {
   i {
     cursor: pointer;
     position: fixed;
@@ -10,46 +10,51 @@
       transform: scale(1.1);
     }
   }
-  .chatBot {
+  .chatBotContainer {
     position: fixed;
-    right: 30px;
-    bottom: 75px;
     width: 350px;
     height: 500px;
+    bottom: 75px;
+    right: 30px;
     border-radius: 10px;
     box-shadow: 1px 2px 3px 3px #eee;
     background-color: #f7f7f7;
     z-index: 100;
-    overflow-y: scroll;
 
-    .user {
-      width: 60%;
-      outline: none;
-      padding: 4px;
-      border-radius: 30px;
-      border: 1px solid rgb(248, 230, 230);
-      background-color:#5851DB;
-      color: white;
-      margin: 10px 0 0 auto;
-      padding: 8px;
-    }
+    .chatBot {
+      width: 350px;
+      height: 450px;
+      overflow-y: scroll;
 
-    .bot {
-      width: 60%;
-      outline: none;
-      padding: 4px;
-      border-radius: 30px;
-      border: 1px solid rgb(248, 230, 230);
-      background-color: #00a699;
-      margin: 10px;
-      padding: 8px;
-      color: white;
+      .user {
+        width: 60%;
+        outline: none;
+        padding: 4px;
+        border-radius: 30px;
+        border: 1px solid rgb(248, 230, 230);
+        background-color: #5851db;
+        color: white;
+        margin: 10px 0 0 auto;
+        padding: 8px;
+      }
+
+      .bot {
+        width: 60%;
+        outline: none;
+        padding: 4px;
+        border-radius: 30px;
+        border: 1px solid rgb(248, 230, 230);
+        background-color: #00a699;
+        margin: 10px;
+        padding: 8px;
+        color: white;
+      }
     }
 
     .formInput {
       width: 85%;
       position: absolute;
-      bottom: 0px;
+      bottom: 15px;
       left: 15px;
 
       input {

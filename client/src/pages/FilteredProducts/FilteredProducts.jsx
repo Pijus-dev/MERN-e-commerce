@@ -8,10 +8,13 @@ import CarouselProduct from "../../components/carouselProduct/CarouselProduct";
 import Header from "../../components/header/Header";
 import { listProducts } from "../../redux/productReducer/productActions";
 
+import Suggestions from "../../components/suggestions/Suggesstions";
+
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import styles from "./filteredProducts.module.scss";
 import Slider from "react-slick";
+import { ReactComponent as SearchIcon } from "../../img/icon.svg";
 import { Link } from "react-router-dom";
 
 const postsPerPage = 6;
@@ -20,6 +23,7 @@ let arrayForHoldingPosts = [];
 const FilteredProducts = ({ match, history }) => {
   const keyword = match.params.keyword;
   const [itemsToShow, setItemsToShow] = useState([]);
+  const [suggestions, setSuggestions] = useState([]);
   const [next, setNext] = useState(6);
 
   const dispatch = useDispatch();
@@ -82,6 +86,23 @@ const FilteredProducts = ({ match, history }) => {
     dispatch(listProducts(keyword));
   }, [dispatch, keyword]);
 
+  const onTextChanged = (e) => {
+    const { value } = e.target;
+    let predictions = [];
+    if (value.length > 0) {
+      const regex = new RegExp(`^${value}`, "i");
+      predictions = products.sort().filter(({ name }) => regex.test(name));
+      setSuggestions(predictions);
+    }
+  };
+
+  const renderSuggestions = () => {
+    if (suggestions.length === 0) {
+      return null;
+    }
+
+    return <Suggestions suggestions={suggestions} />;
+  };
   return (
     <>
       <Header />
@@ -122,6 +143,15 @@ const FilteredProducts = ({ match, history }) => {
             ))}
           </Slider>
         </div>
+        <Col>
+          <div className={styles.filterInput}>
+            <input type="text" onChange={onTextChanged} />
+            <div className={styles.inputIcon}>
+              <SearchIcon />
+            </div>
+          </div>
+          {renderSuggestions()}
+        </Col>
         <h2 className="my-5">Latest Products</h2>
         <Row>
           {products.slice(0, 6).map((item) => (
